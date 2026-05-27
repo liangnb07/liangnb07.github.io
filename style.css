@@ -1,0 +1,65 @@
+/*================================ 
+Global
+================================*/
+
+.vt323-regular {
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.doto-uniquifier {
+  font-family: "Doto", sans-serif;
+  font-optical-sizing: auto;
+    font-style: normal;
+  font-variation-settings: "ROND" 0;
+}
+
+html, body, nav{
+    font-size: 1rem;
+    font-weight:900;
+    max-width: 1800px;
+    font-family: "Doto", sans-serif;
+}
+
+h1 {    
+    font-family: "Doto", sans-serif;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    display: inline-block;
+    transform-origin: left;
+}
+
+p, ul li {
+    font-size: 0.9rem;
+    max-width: 1200px;
+    font-family: "Doto", sans-serif;
+}
+
+nav {
+    font-size: 0.8rem;
+    font-family: "Doto", sans-serif;
+}
+
+.condensed-terminal {
+    display: inline-block;    /* Necessary for transform to work */
+    transform: scaleX(0.75);   /* Force-squishes the letter widths to 75% */
+    transform-origin: left;   /* Keeps the text aligned perfectly to the left */
+    letter-spacing: -0.06em;  /* Pulls the spaces between letters tighter */
+}
+
+/*================================ 
+Home
+================================*/
+
+
+
+/*================================ 
+Photos
+================================*/
+
+
+/*================================ 
+Projects
+================================*/
