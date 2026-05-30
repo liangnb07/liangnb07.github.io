@@ -2,6 +2,15 @@
 // global
 // ==========================================
 
+document.addEventListener("DOMContentLoaded", () => {
+    //run navbar
+    try {
+        injectNavbar();
+    } catch (e) {
+        console.error("Navbar failed to inject:", e);
+    }
+});
+
 function injectNavbar() {
     const navElement = document.querySelector("nav");
     if (!navElement) return; // Exit early if no nav tag
