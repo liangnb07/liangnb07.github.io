@@ -68,7 +68,7 @@ Photos
 /* The container holding all the images */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 5px;
     padding: 5px;
 }
@@ -76,11 +76,11 @@ Photos
 
 .gallery-grid img {
     width: 100%;  
-    height: 400px;
+    height: 600px;
     object-fit: cover;  
     border-radius: 2px; 
     display: block;
-    margin-left: 5px;
+    margin-left: 0px;
     box-sizing: border-box;
 }
 
