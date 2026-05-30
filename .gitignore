@@ -1,0 +1,7 @@
+# Ignore editor swap files
+.*.swp
+*.swp
+
+# Ignore system junk
+.DS_Store
+Thumbs.db
