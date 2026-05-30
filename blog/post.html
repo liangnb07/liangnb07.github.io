@@ -4,8 +4,9 @@
         <!--home-->
         <meta charset = "UTF-8">
         <title>liangnb07</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../style.css">
         <script src="script.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
         <!--fonts-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,5 +21,55 @@
     <body>
         <h1>post</h1>
         <nav></nav>
+        <div id="nav-container"></div> 
+
+    <main>
+        <article id="content">
+            <p style="color: gray;">文章加载中...</p>
+        </article>
+    </main>
+
+    <script>
+        async function loadMarkdownPost() {
+            // 获取 URL 中的查询参数（例如 ?file=reflections/052926.md）
+            const urlParams = new URLSearchParams(window.location.search);
+            const markdownFile = urlParams.get('file');
+
+            const contentDiv = document.getElementById('content');
+
+            if (!markdownFile) {
+                contentDiv.innerHTML = "<p>错误：未指定要加载的文章。</p>";
+                return;
+            }
+
+            try {
+                // 此时 post.html 在 blog/ 目录下
+                // 如果传过来的 file 是 "reflections/052926.md"，那对应的路径就是 ./reflections/052926.md
+                const response = await fetch(`./${markdownFile}`);
+                
+                if (!response.ok) {
+                    throw new Error("文章不存在");
+                }
+
+                const markdownText = await response.text();
+                
+                // 使用 marked 库将 MD 文本转换为 HTML
+                contentDiv.innerHTML = marked.parse(markdownText);
+                
+                // 可选：动态把文章第一行（如果是标题的话）变成网页的 Title
+                const firstLine = markdownText.split('\n')[0];
+                if (firstLine.startsWith('# ')) {
+                    document.title = firstLine.replace('# ', '') + " - 我的博客";
+                }
+
+            } catch (error) {
+                console.error(error);
+                contentDiv.innerHTML = `<p>加载文章失败：路径可能不正确或文件不存在。</p>`;
+            }
+        }
+
+        // 页面加载完成后自动执行
+        window.addEventListener('DOMContentLoaded', loadMarkdownPost);
+    </script>
     </body>
 </html>
