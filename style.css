@@ -1,81 +1,31 @@
-/*================================ 
-Global
-================================*/
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--home-->
+        <meta charset = "UTF-8">
+        <title>liangnb07 photos</title>
+        <link rel="stylesheet" href="../style.css">
+        <script src="../script.js" defer></script>
 
-.vt323-regular {
-  font-family: "VT323", monospace;
-  font-weight: 400;
-  font-style: normal;
-}
+        <!--fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-
-.doto-uniquifier {
-  font-family: "Doto", sans-serif;
-  font-optical-sizing: auto;
-    font-style: normal;
-  font-variation-settings: "ROND" 0;
-}
-
-html, body, nav{
-    font-size: 1rem;
-    font-weight:900;
-    max-width: 1800px;
-    font-family: "Doto", sans-serif;
-}
-
-h1 {    
-    font-family: "Doto", sans-serif;
-    font-size: 3rem;
-    margin-bottom: 10px;
-    display: inline-block;
-    transform-origin: left;
-}
-
-p, ul li {
-    font-size: 0.9rem;
-    max-width: 1200px;
-    font-family: "Doto", sans-serif;
-}
-
-nav {
-    font-size: 0.8rem;
-    font-family: "Doto", sans-serif;
-}
-
-.condensed-terminal {
-    display: inline-block;    /* Necessary for transform to work */
-    transform: scaleX(0.75);   /* Force-squishes the letter widths to 75% */
-    transform-origin: left;   /* Keeps the text aligned perfectly to the left */
-    letter-spacing: -0.06em;  /* Pulls the spaces between letters tighter */
-}
-
-/*================================ 
-Home
-================================*/
-
-
-
-/*================================ 
-Photos
-================================*/
-
-/* responsive grid layout */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-/* physical rendering size */
-.gallery-item img {
-    width: 100%;  
-    height: 300px;    
-    object-fit: cover;   
-    border-radius: 4px;  
-    display: block;
-}
-
-/*================================ 
-Projects
-================================*/
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <h1>photos</h1>
+        <nav></nav>
+    </br>
+        <img src="../images/DSC_8931.png">
+        <img src="../images/DSC_8982.png">
+        <img src="../images/DSC_8985.png">
+        <img src="../images/DSC_9049.png">
+        <img src="../images/DSC_9060.png">
+        <img src="../images/DSC_9069.png">
+        <img src="../images/DSC_9074.png">
+    </body>
+</html>
