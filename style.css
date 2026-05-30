@@ -73,7 +73,7 @@ Photos
 
 
 .gallery-grid img {
-    width: 534px !important;  
+    width: 150% !important;  
     height: 400px !important;
     object-fit: cover;  
     border-radius: 6px; 
