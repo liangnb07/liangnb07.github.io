@@ -1,24 +1,29 @@
 // ==========================================
 // global
 // ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    injectNavbar();
-    initRetroEffects();
-});
 
-// 1. Handle the Navigation Bar Everywhere
 function injectNavbar() {
     const navElement = document.querySelector("nav");
     if (!navElement) return; // Exit early if no nav tag
 
-    // 1. Check if we are inside a subfolder or looking at a file inside a subfolder
+    // get current pathname
     const path = window.location.pathname;
-    const isSubfolder = path.includes('/blog/') || path.includes('/photos/') || path.includes('/projects/');
+    const pathSegments = path.split('/').filter(segment => segment.length > 0);
 
-    // 2. Set the prefix to reach the root folder relatively
-    const prefix = isSubfolder ? "../" : "";
+    //count how many folders deep we are
+    let depth = pathSegments.length;
+    if (pathSegments[pathSegments.length - 1].includes('.')) {
+        depth -= 1;
+    }
 
-    // 3. Inject the clean relative paths
+    if (pathSegments[0] === 'liangnb07.github.io') {
+        depth -= 1;
+    }
+
+    //generate number of ../ needed to hit root
+    const prefix = "../".repeat(Math.max(0, depth));
+
+    //injection
     navElement.innerHTML = `
         <a href="${prefix}index.html">home</a> |
         <a href="${prefix}blog/index.html">blog</a> |
@@ -26,14 +31,3 @@ function injectNavbar() {
         <a href="${prefix}projects/index.html">projects</a>
     `;
 }
-
-// ==========================================
-// sub specific logic
-// ==========================================
-/* (example)
-const markdownArea = document.getElementById("markdown-editor");
-if (markdownArea) {
-    console.log("Loading editor logic...");
-    // Put your text editor keybindings or JSON parsing code here
-}
-    */
