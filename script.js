@@ -1,5 +1,5 @@
 // ==========================================
-// GLOBAL RUNNERS (Runs on EVERY single page)
+// global
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     injectNavbar();
@@ -9,35 +9,31 @@ document.addEventListener("DOMContentLoaded", () => {
 // 1. Handle the Navigation Bar Everywhere
 function injectNavbar() {
     const navElement = document.querySelector("nav");
-    if (!navElement) return; // Exit early if the page doesn't have a <nav> tag
+    if (!navElement) return; // Exit early if no nav tag
 
-    // Determine if we are in a subfolder or root to fix paths dynamically
-    const isSubfolder = window.location.pathname.includes('/blog') || 
-                        window.location.pathname.includes('/photos') || 
-                        window.location.pathname.includes('/projects');
-    
+    // 1. Check if we are inside a subfolder or looking at a file inside a subfolder
+    const path = window.location.pathname;
+    const isSubfolder = path.includes('/blog/') || path.includes('/photos/') || path.includes('/projects/');
+
+    // 2. Set the prefix to reach the root folder relatively
     const prefix = isSubfolder ? "../" : "";
 
+    // 3. Inject the clean relative paths
     navElement.innerHTML = `
-        <a href="${prefix}">home</a> | 
-        <a href="${prefix}blog">blog</a> |
-        <a href="${prefix}photos">photos</a> |
-        <a href="${prefix}projects">projects</a> |
+        <a href="${prefix}index.html">home</a> |
+        <a href="${prefix}blog/index.html">blog</a> |
+        <a href="${prefix}photos/index.html">photos</a> |
+        <a href="${prefix}projects/index.html">projects</a>
     `;
 }
 
-// 2. Handle a global feature (like console greeting or terminal animations)
-function initRetroEffects() {
-    console.log("initialized.");
-}
-
 // ==========================================
-// PAGE-SPECIFIC LOGIC (Only runs where needed)
+// sub specific logic
 // ==========================================
-
-// 3. This will ONLY run on your mdnote or projects page if the specific ID exists
+/* (example)
 const markdownArea = document.getElementById("markdown-editor");
 if (markdownArea) {
     console.log("Loading editor logic...");
     // Put your text editor keybindings or JSON parsing code here
 }
+    */
