@@ -67,12 +67,12 @@ Photos
     padding: 20px;
 }
 
-/* 2. The Images: Restricts their physical rendering size */
+/* physical rendering size */
 .gallery-item img {
-    width: 100%;          /* Fills the width of the grid cell safely */
-    height: 300px;        /* Locks the vertical height so all tiles match */
-    object-fit: cover;    /* Crops the image perfectly without distorting the aspect ratio */
-    border-radius: 4px;   /* Clean, rounded corners */
+    width: 100%;  
+    height: 300px;    
+    object-fit: cover;   
+    border-radius: 4px;  
     display: block;
 }
 
