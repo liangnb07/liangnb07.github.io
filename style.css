@@ -59,6 +59,22 @@ Home
 Photos
 ================================*/
 
+/* responsive grid layout */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* 2. The Images: Restricts their physical rendering size */
+.gallery-item img {
+    width: 100%;          /* Fills the width of the grid cell safely */
+    height: 300px;        /* Locks the vertical height so all tiles match */
+    object-fit: cover;    /* Crops the image perfectly without distorting the aspect ratio */
+    border-radius: 4px;   /* Clean, rounded corners */
+    display: block;
+}
 
 /*================================ 
 Projects
