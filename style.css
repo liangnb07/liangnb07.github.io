@@ -19,7 +19,6 @@ Global
 html, body, nav{
     font-size: 1rem;
     font-weight:900;
-    max-width: 1800px;
     font-family: "Doto", sans-serif;
 }
 
@@ -43,10 +42,10 @@ nav {
 }
 
 .condensed-terminal {
-    display: inline-block;    /* Necessary for transform to work */
-    transform: scaleX(0.75);   /* Force-squishes the letter widths to 75% */
-    transform-origin: left;   /* Keeps the text aligned perfectly to the left */
-    letter-spacing: -0.06em;  /* Pulls the spaces between letters tighter */
+    display: inline-block;   
+    transform: scaleX(0.75);   
+    transform-origin: left;   
+    letter-spacing: -0.06em; 
 }
 
 /*================================ 
@@ -59,7 +58,7 @@ Home
 Photos
 ================================*/
 
-/* responsive grid layout */
+
 /*================================ 
 Photos
 ================================*/
@@ -67,18 +66,17 @@ Photos
 /* The container holding all the images */
 .gallery-grid {
     display: grid;
-    /* This creates as many 300px columns as can fit, splitting the rest evenly */
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
-/* FIX: Target the actual img elements directly inside the grid */
+
 .gallery-grid img {
-    width: 100%;          /* Compels the image to match the width of its grid cell */
-    height: 350px;         /* Gives them a uniform, neat height */
-    object-fit: cover;     /* Crops the image cleanly so it doesn't distort or stretch */
-    border-radius: 6px;    /* Optional: slightly softer corners */
+    width: 100% !important;  
+    height: 350px !important;
+    object-fit: cover;  
+    border-radius: 6px; 
     display: block;
 }
 
