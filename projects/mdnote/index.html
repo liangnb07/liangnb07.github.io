@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>md note+ 1.5 stable</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 fill=%22black%22 stroke=%22white%22 stroke-width=%223%22 font-family=%22monospace%22 font-size=%2290%22 font-weight=%22bold%22>+</text></svg>">
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&family=Noto+Serif+JP:wght@200;400;700&display=swap" rel="stylesheet">
+
+
+    <style>
+      :root {
+        --bg-color: #0c0d0d;
+        --text-color: #f2eed5;
+        --sidebar-text: rgba(242, 238, 213, 0.3);
+        --border-color: rgba(128, 128, 128, 0.15);
+        --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        --sidebar-width: 240px;
+        --scroll-thumb: #333;
+        --scroll-hover: #555;
+      }
+
+      body.light-mode {
+        --bg-color: #fcf8e3;
+        --text-color: #1c1b1c;
+        --sidebar-text: rgba(28, 27, 28, 0.3);
+        --scroll-thumb: #d9d4ba;
+        --scroll-hover: #b8b398;
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--scroll-thumb);
+        border-radius: 10px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Noto Serif JP', serif;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        overflow: hidden;
+        transition: background-color var(--transition), color var(--transition);
+      }
+
+/* --- IMAGE SLIDER STYLES --- */
+.img-container {
+  display: inline-block;
+  position: relative;
+  margin: 10px 0;
+  max-width: 100%;
+}
+
+.img-container img {
+  display: block;
+  height: auto;
+  transition: width 0.1s ease-out;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.img-controls {
+  display: none; 
+  position: absolute; /* Keeps it relative to the image container */
+  z-index: 1000;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  padding: 5px 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  pointer-events: auto; /* Ensures slider remains clickable */
+}
+
+.img-controls span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  min-width: 35px;
+  opacity: 0.6;
+}
+
+/* Minimalist Range Input */
+.img-controls input[type=range] {
+  -webkit-appearance: none;
+  width: 120px;
+  background: transparent;
+}
+
+.img-controls input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.img-controls input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: var(--text-color);
+  cursor: pointer;
+  margin-top: -6px; /* Centers thumb on track */
+  border: none;
+}
+
+      #hamburger-menu {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 50;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+        opacity: 0.3;
+        transition: opacity 0.3s;
+      }
+
+      #hamburger-menu:hover {
+        opacity: 1;
+      }
+
+      #hamburger-menu div {
+        width: 20px;
+        height: 1px;
+        background-color: var(--text-color);
+        transition: 0.3s;
+      }
+
+      #sidebar {
+        width: var(--sidebar-width);
+        height: 100%;
+        background: var(--bg-color);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        transition: margin-left var(--transition);
+        flex-shrink: 0;
+        z-index: 100;
+      }
+
+      #sidebar.hidden {
+        margin-left: calc(var(--sidebar-width) * -1);
+      }
+
+      .sidebar-controls button {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--sidebar-text);
+        padding: 0.7rem 1rem;
+        font-family: inherit;
+        cursor: pointer;
+        font-size: 0.85rem;
+        text-align: left;
+        letter-spacing: 0.02em;
+        transition: 0.2s;
+        border-bottom: 1px solid var(--border-color);
+        text-transform: lowercase;
+        outline: none;
+      }
+
+      .sidebar-controls button:hover {
+        color: var(--text-color);
+        background: rgba(128, 128, 128, 0.05);
+      }
+
+      #tree-container {
+        padding: 20px 10px;
+        flex-grow: 1;
+        overflow: auto;
+      }
+
+      .sidebar-row {
+        display: flex;
+        align-items: center;
+        position: relative;
+        min-height: 32px;
+        width: max-content;
+        min-width: 100%;
+        cursor: grab;
+      }
+
+      .line-node {
+        position: relative;
+        width: 16px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+
+      .line-v {
+        position: absolute;
+        left: 8px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: var(--border-color);
+      }
+
+      .line-v.last-branch {
+        bottom: 50%;
+      }
+
+      .line-h {
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        width: 8px;
+        height: 1px;
+        background: var(--border-color);
+      }
+
+      .leaf-dot {
+        width: 14px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-right: 2px;
+        opacity: 0.2;
+      }
+
+      .leaf-dot::after {
+        content: "";
+        width: 4px;
+        height: 4px;
+        border: 1px solid var(--text-color);
+        border-radius: 50%;
+      }
+
+      .collapse-toggle {
+        width: 14px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.2;
+        font-size: 6px;
+        z-index: 2;
+        flex-shrink: 0;
+        margin-right: 2px;
+        transition: 0.2s;
+      }
+
+      .collapse-toggle.collapsed {
+        transform: rotate(-90deg);
+      }
+
+      .page-link {
+        flex-grow: 1;
+        padding: 4px 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        opacity: 0.3;
+        white-space: nowrap;
+        transition: opacity 0.2s;
+        font-weight: 200;
+      }
+
+      .page-link.active {
+        opacity: 1 !important;
+        color: var(--text-color);
+        font-weight: 200;
+      }
+
+      #main-container {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 4vw 40px 0 6vw;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+
+      #editor-title {
+        font-size: clamp(1.8rem, 4vw, 3.5rem);
+        font-weight: 100;
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        outline: none;
+        width: 100%;
+        transform: scaleY(1.3);
+        transform-origin: left;
+        margin-bottom: 1.5rem;
+        font-family: 'Noto Serif JP', serif;
+      }
+
+      #editor-title::placeholder {
+        opacity: 0.1;
+      }
+
+      #editor-content {
+        font-size: 1.05rem;
+        font-weight: 250;
+        line-height: 1.7;
+        outline: none;
+        margin-right: 1.5rem;
+        padding-bottom: 60vh;
+	      padding-top: 2vh;
+      }
+
+      #editor-content:empty::before {
+        content: attr(placeholder);
+        opacity: 0.1;
+      }
+
+      /* --- TREEMAP OVERLAY & HIERARCHY --- */
+      #tree-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        z-index: 2000;
+        display: none;
+        padding: 8vh 8vw;
+        overflow-y: auto;
+      }
+
+      #esc-btn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        color: var(--sidebar-text);
+        font-size: 0.7rem;
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+        padding: 5px 12px;
+        transition: 0.2s;
+        text-transform: lowercase;
+      }
+
+      #tree-overlay h2 {
+        font-size: 2rem;
+        font-weight: 100;
+        opacity: 0.3;
+        transform: scaleY(1.4);
+        transform-origin: left;
+        margin-bottom: 40px;
+      }
+
+      #search-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 60px;
+      }
+
+      #search-input {
+        width: 400px;
+        height: 34px;
+        background: rgba(128, 128, 128, 0.08);
+        border: 1px solid var(--border-color);
+        border-radius: 4px 0 0 4px;
+        padding: 0 15px;
+        color: var(--text-color);
+        font-family: 'Noto Serif JP', serif;
+        font-size: 0.85rem;
+        opacity: 0.5;
+        outline: none;
+      }
+
+      #search-btn {
+        height: 34px;
+        padding: 0 20px;
+        background: rgba(128, 128, 128, 0.15);
+        border: 1px solid var(--border-color);
+        border-left: none;
+        border-radius: 0 4px 4px 0;
+        color: var(--sidebar-text);
+        font-family: 'Noto Serif JP', serif;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .tree-branch {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 2px;
+      }
+
+      .tree-node-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .tree-branch::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: -12px;
+        bottom: 0;
+        width: 1px;
+        background: var(--border-color);
+      }
+
+      .tree-branch:last-child::before {
+        height: 26px;
+      }
+
+      .tree-node-wrapper::before {
+        content: "";
+        position: absolute;
+        left: -20px;
+        top: 50%;
+        width: 20px;
+        height: 1px;
+        background: var(--border-color);
+      }
+
+      .tree-node-wrapper::after {
+        content: "";
+        position: absolute;
+        left: -22px;
+        top: calc(50% - 2px);
+        width: 4px;
+        height: 4px;
+        background: var(--sidebar-text);
+        border-radius: 50%;
+      }
+
+      .visual-tree-link {
+        font-size: 1.4rem;
+        color: var(--text-color);
+        cursor: pointer;
+        opacity: 0.4;
+        display: inline-block;
+        padding: 6px 0;
+        transition: 0.25s;
+        text-transform: lowercase;
+        font-weight: 200;
+      }
+
+      .visual-tree-link:hover {
+        opacity: 1 !important;
+        transform: translateX(5px);
+      }
+
+      .visual-tree-link.search-match {
+        opacity: 1 !important;
+        color: var(--text-color);
+      }
+
+      /* FONT SCALING PER DEPTH */
+      .tree-branch .visual-tree-link {
+        font-size: 1.2rem;
+      }
+
+      .tree-branch .tree-branch .visual-tree-link {
+        font-size: 1.05rem;
+      }
+
+      .tree-branch .tree-branch .tree-branch .visual-tree-link {
+        font-size: 0.9rem;
+      }
+
+      .tree-branch .tree-branch .tree-branch .tree-branch .visual-tree-link {
+        font-size: 0.75rem;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        display: flex;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+      }
+
+      #toolbar button {
+        width: auto;
+        padding: 10px 15px;
+        border: none;
+        border-right: 1px solid var(--border-color);
+        color: var(--text-color);
+        opacity: 0.6;
+        cursor: pointer;
+        background: transparent;
+      }
+
+      #toolbar select option {
+        background: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        padding: 10px;
+      }
+
+      #toolbar select {
+        background: transparent;
+        color: var(--text-color);
+        border: none;
+        border-right: 1px solid var(--border-color);
+        outline: none;
+        opacity: 0.6;
+        padding: 10px 15px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        text-transform: lowercase;
+      }
+
+      #editor-content h1,
+      #editor-content h2,
+      #editor-content h3 {
+        font-weight: 100;
+        transform: scaleY(1.3);
+        transform-origin: left;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      #editor-content h1 {
+        font-size: 2.2rem;
+      }
+
+      #editor-content h2 {
+        font-size: 1.8rem;
+      }
+
+      #editor-content h3 {
+        font-size: 1.4rem;
+      }
+
+      #editor-content blockquote,
+      #editor-content ul,
+      #editor-content ol,
+      #editor-content pre {
+        margin-left: 2rem;
+      }
+
+      #editor-content blockquote {
+        border-left: 1px solid var(--text-color);
+        padding-left: 20px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-weight: 200;
+        margin-right: 4rem;
+        opacity: 0.9;
+      }
+
+      #editor-content pre {
+        background: rgba(128, 128, 128, 0.08);
+        padding: 6px 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        width: fit-content;
+        min-width: 50%;
+      }
+
+      #editor-content p {
+        min-height: 1.5em;
+      }
+
+      #toolbar select option {
+        background: var(--bg-color);
+        color: var(--text-color);
+      }
+    </style>
+
+  <body onkeydown="handleGlobalKeys(event)">
+
+    <div id="hamburger-menu" onclick="toggleSidebar()">
+
+      <div></div>
+
+      <div></div>
+
+      <div></div>
+
+    </div>
+
+    <aside id="sidebar">
+
+      <div class="sidebar-controls">
+
+        <button onclick="toggleSidebar()">hide sidebar</button>
+
+        <button onclick="createNewPage(null)">+ root page</button>
+
+        <button onclick="createNewPage(activePageId)">+ branch page</button>
+
+        <button onclick="showHotkeys()">hotkeys</button>
+
+        <button onclick="exportJSON()">backup json</button>
+
+        <button onclick="importJSON()">restore json</button>
+
+        <button onclick="exportTXT()">export txt</button>
+
+        <button onclick="exportPDF()">export pdf</button>
+
+        <button onclick="toggleVisualTree()">treemap view</button>
+
+        <button id="theme-btn" onclick="toggleTheme()">light mode</button>
+
+        <button onclick="deleteCurrentPage()" style="color: rgba(255,50,50,0.3)">delete page</button>
+
+      </div>
+
+      <div id="tree-container"></div>
+
+    </aside>
+
+    <main id="main-container">
+
+      <input type="text" id="editor-title" autocomplete="off" placeholder="untitled" oninput="updatePageData()">
+
+      <div id="editor-content" placeholder="..." contenteditable="true" oninput="updatePageData()"></div>
+
+    </main>
+
+    <div id="tree-overlay">
+
+      <div id="esc-btn" onclick="toggleVisualTree(true)">esc</div>
+
+      <h2>md note+ // structure</h2>
+
+      <div id="search-wrapper">
+
+        <input type="text" id="search-input" placeholder="search keywords..." oninput="performSearch()">
+
+        <button id="search-btn" onclick="performSearch()">search</button>
+
+      </div>
+
+      <div id="visual-tree-content"></div>
+
+    </div>
+
+    <div id="toolbar">
+
+      <select onchange="execCmd('formatBlock', this.value); this.selectedIndex=0;">
+
+        <option value="" selected disabled>head</option>
+
+        <option value="h1">h1</option>
+
+        <option value="h2">h2</option>
+
+        <option value="h3">h3</option>
+
+        <option value="pText">text</option>
+
+      </select>
+
+      <button onmousedown="event.preventDefault()" onclick="execCmd('bold')"><b>b</b></button>
+
+      <button onmousedown="event.preventDefault()" onclick="execCmd('italic')"><i>i</i></button>
+
+      <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')">ul</button>
+
+      <button onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList')">ol</button>
+
+      <button onmousedown="event.preventDefault()" onclick="execCmd('formatBlock', 'blockquote')">quote</button>
+
+      <button onmousedown="addLink(event)">link</button>
+
+      <button onmousedown="addCodeBlock(event)">code</button>
+
+      <button onclick="document.getElementById('fileInput').click()">img</button>
+
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+
+    <script>
+      function handleImageUpload(e) {
+  const file = e.target.files[0];
+  const container = document.createElement('div');
+  const editor = document.getElementById('editor-content');
+  if (!file) return;
+  if (document.activeElement !== editor) {
+    editor.focus();
+  }
+container.className = 'img-container';
+container.style.width = '100%'; 
+container.contentEditable = false;
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const container = document.createElement('div');
+    container.className = 'img-container';
+    container.contentEditable = false; // Prevents typing inside the container
+
+    const img = document.createElement('img');
+    img.src = event.target.result;
+    img.style.width = "100%"; // Default starting size
+
+    // Create the Control UI
+    const controls = document.createElement('div');
+    controls.className = 'img-controls';
+    
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '1';
+    slider.max = '200';
+    slider.value = '100';
+
+    const label = document.createElement('span');
+    label.textContent = '100%';
+
+    slider.oninput = (ev) => {
+      img.style.width = slider.value + '%';
+      label.textContent = slider.value + '%';
+      updatePageData();
+    };
+
+    controls.appendChild(slider);
+    controls.appendChild(label);
+    container.appendChild(controls);
+    container.appendChild(img);
+
+    // Toggle controls on click
+img.onclick = (event) => {
+  event.stopPropagation();
+  
+  // Hide all other open controls first
+  document.querySelectorAll('.img-controls').forEach(c => c.style.display = 'none');
+
+  // Calculate position
+  // event.offsetX and event.offsetY give coordinates relative to the image
+  const clickX = event.offsetX;
+  const clickY = event.offsetY;
+
+  // Position the controls bar at the click location
+  // We subtract a bit from Y to show it slightly above the cursor
+  controls.style.left = `${clickX}px`;
+  controls.style.top = `${clickY - 40}px`; 
+  
+  controls.style.display = 'flex';
+};
+
+    insertAtCursor(container);
+    updatePageData();
+  };
+  reader.readAsDataURL(file);
+}
+function insertAtCursor(el) {
+  const sel = window.getSelection();
+  if (sel.getRangeAt && sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(el);
+    // Move cursor after the image
+    range.setStartAfter(el);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+// Hide image controls when clicking elsewhere
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.img-container')) {
+    document.querySelectorAll('.img-controls').forEach(c => c.style.display = 'none');
+  }
+});
+      let db;
+      let pages = [];
+      let activePageId = null;
+      let draggedId = null;
+      let isLoaded = false;
+
+      const request = indexedDB.open("MDNotesDB", 2);
+      request.onupgradeneeded = e => {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains("pages")) db.createObjectStore("pages", { keyPath: "id" });
+      };
+      request.onsuccess = e => {
+        db = e.target.result;
+        const tx = db.transaction("pages", "readonly");
+        const req = tx.objectStore("pages").getAll();
+        req.onsuccess = () => {
+          pages = req.result || [];
+          isLoaded = true;
+          if (pages.length === 0) createNewPage(null);
+          else loadPage(pages[0].id);
+        };
+      };
+
+      function saveToDB(page) {
+        if (!page || !page.id) return;
+        const tx = db.transaction("pages", "readwrite");
+        tx.objectStore("pages").put(page);
+      }
+
+      function loadPage(id) {
+        const page = pages.find(p => p.id === id);
+        if (!page) return;
+        activePageId = id;
+        document.getElementById('editor-title').value = page.title || "";
+        document.getElementById('editor-content').innerHTML = page.content || "";
+        document.getElementById('editor-title').readOnly = (id === 'hotkeys');
+        document.getElementById('editor-content').contentEditable = (id !== 'hotkeys');
+        renderTree();
+      }
+
+      function createNewPage(parentId) {
+        if (!isLoaded) return;
+        const id = Date.now().toString();
+        const newPage = { id, title: '', content: '', parent: parentId, collapsed: false, order: Date.now() };
+        pages.push(newPage);
+        saveToDB(newPage);
+        loadPage(id);
+      }
+
+      function updatePageData() {
+        if (!isLoaded || activePageId === 'hotkeys' || !activePageId) return;
+        const page = pages.find(p => p.id === activePageId);
+        if (page) {
+          page.title = document.getElementById('editor-title').value;
+          page.content = document.getElementById('editor-content').innerHTML;
+          saveToDB(page);
+          renderTree();
+        }
+      }
+
+      function deleteCurrentPage() {
+        if (!activePageId || activePageId === 'hotkeys') return;
+        const idsToDelete = [];
+        const findChildren = (id) => {
+          idsToDelete.push(id);
+          pages.filter(p => p.parent === id).forEach(child => findChildren(child.id));
+        };
+        findChildren(activePageId);
+        const tx = db.transaction("pages", "readwrite");
+        const store = tx.objectStore("pages");
+        idsToDelete.forEach(id => store.delete(id));
+        tx.oncomplete = () => {
+          pages = pages.filter(p => !idsToDelete.includes(p.id));
+          if (pages.length > 0) loadPage(pages[0].id);
+          else createNewPage(null);
+        };
+      }
+
+      function renderTree() {
+        const container = document.getElementById('tree-container');
+        container.innerHTML = '';
+        const build = (parentId, depth, isHidden) => {
+          if (isHidden) return;
+          pages.filter(p => p.parent === parentId && p.id !== 'hotkeys')
+            .sort((a, b) => a.order - b.order)
+            .forEach((p, index, arr) => {
+              const row = document.createElement('div');
+              row.className = 'sidebar-row';
+              row.draggable = true;
+              row.ondragstart = () => draggedId = p.id;
+              row.ondrop = (e) => {
+                e.preventDefault();
+                if (draggedId && draggedId !== p.id) {
+                  const dP = pages.find(x => x.id === draggedId);
+                  if (dP) { dP.parent = p.id; saveToDB(dP); renderTree(); }
+                }
+              };
+              row.ondragover = (e) => e.preventDefault();
+              for (let i = 0; i < depth; i++) {
+                const n = document.createElement('div');
+                n.className = 'line-node';
+                const v = document.createElement('div');
+                v.className = 'line-v';
+                if (i === depth - 1 && index === arr.length - 1) v.classList.add('last-branch');
+                if (i === depth - 1) n.appendChild(Object.assign(document.createElement('div'), { className: 'line-h' }));
+                n.appendChild(v);
+                row.appendChild(n);
+              }
+              const hasC = pages.some(c => c.parent === p.id);
+              const t = document.createElement('div');
+              if (hasC) {
+                t.className = `collapse-toggle ${p.collapsed?'collapsed':''}`;
+                t.innerHTML = '▲';
+                t.onclick = (e) => { e.stopPropagation(); p.collapsed = !p.collapsed; saveToDB(p); renderTree(); };
+              } else t.className = 'leaf-dot';
+              row.appendChild(t);
+              const l = document.createElement('span');
+              l.className = `page-link ${p.id===activePageId?'active':''}`;
+              l.textContent = p.title || 'untitled';
+              l.onclick = () => loadPage(p.id);
+              row.appendChild(l);
+              container.appendChild(row);
+              build(p.id, depth + 1, p.collapsed || isHidden);
+            });
+        };
+        build(null, 0, false);
+      }
+
+      function toggleVisualTree(close = false) {
+        const ov = document.getElementById('tree-overlay');
+        if (close) { ov.style.display = 'none'; return; }
+        ov.style.display = (ov.style.display !== 'block') ? 'block' : 'none';
+        if (ov.style.display === 'block') {
+          document.getElementById('search-input').value = '';
+          renderVisualTree();
+          document.getElementById('search-input').focus();
+        }
+      }
+
+      function performSearch() {
+        const term = document.getElementById('search-input').value.toLowerCase();
+        if (!term) { renderVisualTree(); return; }
+        const visibleIds = new Set();
+        const matchedIds = new Set();
+        pages.forEach(p => {
+          const cleanContent = (p.content || "").replace(/<[^>]*>/g, '').toLowerCase();
+          if ((p.title || "").toLowerCase().includes(term) || cleanContent.includes(term)) {
+            matchedIds.add(p.id);
+            let curr = p;
+            while (curr) { visibleIds.add(curr.id); curr = pages.find(parent => parent.id === curr.parent); }
+          }
+        });
+        renderVisualTree(visibleIds, matchedIds);
+      }
+
+      function renderVisualTree(filterSet = null, matches = new Set()) {
+        const container = document.getElementById('visual-tree-content');
+        container.innerHTML = '';
+        const buildMap = (pid, target) => {
+          pages.filter(p => p.parent === pid && p.id !== 'hotkeys').forEach(p => {
+            if (filterSet && !filterSet.has(p.id)) return;
+            const branch = document.createElement('div');
+            branch.className = 'tree-branch';
+            const link = document.createElement('span');
+            link.className = `visual-tree-link ${matches.has(p.id) ? 'search-match' : ''}`;
+            link.textContent = p.title || 'untitled';
+            link.onclick = () => { loadPage(p.id); toggleVisualTree(true); };
+            const wrapper = document.createElement('div');
+            wrapper.className = 'tree-node-wrapper';
+            wrapper.appendChild(link);
+            branch.appendChild(wrapper);
+            buildMap(p.id, branch);
+            target.appendChild(branch);
+          });
+        };
+        buildMap(null, container);
+      }
+
+function getFullBranchData(rootId, depth = 0, type = 'text') {
+        let title, content;
+        const page = pages.find(p => p.id === rootId);
+        
+        if (rootId === 'hotkeys') {
+          title = "hotkeys";
+          content = document.getElementById('editor-content').innerHTML;
+        } else {
+          if (!page) return "";
+          title = page.title || 'untitled';
+          content = page.content || '';
+        }
+
+        let output = "";
+        if (type === 'text') {
+          const indent = "  ".repeat(depth);
+          const clean = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+          output += `${indent}${depth > 0 ? '- ' : ''}${title}\n${indent}${clean}\n\n`;
+        } else {
+          output += `
+            <div style="margin-bottom: 30px; color:#000; font-family: 'JetBrains Mono', monospace;">
+              <h2 style="border-bottom: 1px solid #eee; font-weight:400; text-transform:lowercase; font-size: 18pt; margin-bottom: 10px;">${title}</h2>
+              <div style="font-size: 12pt; line-height: 1.5; font-weight: 300;">${content}</div>
+            </div>`;
+        }
+
+        // Logic Change: 
+        // 1. If we are at the top level of the export (depth === 0)
+        // 2. And this page has a parent (it's a branch)
+        // 3. Then STOP here. Do not look for children.
+        if (depth === 0 && page && page.parent !== null) {
+          return output;
+        }
+
+        // Otherwise, if it's a root or we are already inside a root's recursion, get children
+        if (rootId !== 'hotkeys') {
+          pages
+            .filter(p => p.parent === rootId)
+            .sort((a, b) => a.order - b.order)
+            .forEach(child => {
+              output += getFullBranchData(child.id, depth + 1, type);
+            });
+        }
+        return output;
+      }
+
+      function exportPDF() {
+        if (!activePageId) return;
+        const now = new Date();
+        const ts = `${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}_${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+        const page = pages.find(p => p.id === activePageId);
+        const name = activePageId === 'hotkeys' ? 'hotkeys' : (page?.title || 'untitled');
+        const fileName = `export_${name.replace(/\s+/g, '_').toLowerCase()}_{${ts}}.pdf`;
+        const container = document.createElement('div');
+        container.style.padding = "40px";
+        container.style.background = "#fff";
+        
+        container.innerHTML = getFullBranchData(activePageId, 0, 'html');
+
+        html2pdf().set({
+          margin: [0.5, 0.5, 0.5, 0.5],
+          filename: fileName,
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        }).from(container).save();
+      }
+
+      function exportTXT() {
+        if (!activePageId) return;
+        const now = new Date();
+        const ts = `${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}_${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+        const page = pages.find(p => p.id === activePageId);
+        const name = activePageId === 'hotkeys' ? 'hotkeys' : (page?.title || 'untitled');
+        const fileName = `export_${name.replace(/\s+/g, '_').toLowerCase()}_{${ts}}.pdf`;
+        const blob = new Blob([getFullBranchData(activePageId, 0, 'text')], { type: "text/plain" });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `notes.txt`;
+        a.click();
+      }
+
+      function toggleSidebar() { document.getElementById('sidebar').classList.toggle('hidden'); }
+      function toggleTheme() { document.body.classList.toggle('light-mode'); }
+      function execCmd(cmd, value = null) {
+        if (activePageId !== 'hotkeys') {
+          document.execCommand(cmd, false, value);
+          document.getElementById('editor-content').focus();
+          updatePageData();
+        }
+      }
+
+      function handleGlobalKeys(e) {
+        const isCtrl = e.ctrlKey || e.metaKey;
+        const key = e.key.toLowerCase();
+        if (isCtrl && key === 'r') { e.preventDefault(); createNewPage(null); }
+        if (isCtrl && key === 'b') { e.preventDefault(); createNewPage(activePageId); }
+        if (isCtrl && key === 'l') { e.preventDefault(); toggleSidebar(); }
+        if (isCtrl && key === 'm') { e.preventDefault(); toggleTheme(); }
+        if (isCtrl && key === 'd') { e.preventDefault(); deleteCurrentPage(); }
+        if (isCtrl && key === 'h') { e.preventDefault(); showHotkeys(); }
+        if (e.key === 'Escape') toggleVisualTree(true);
+      }
+
+      function showHotkeys() {
+        activePageId = 'hotkeys';
+        const t = document.getElementById('editor-title');
+        const c = document.getElementById('editor-content');
+        t.value = "hotkeys";
+        t.readOnly = true;
+        c.innerHTML = `<div style="font-family:'JetBrains Mono'; font-size: 0.9rem; line-height: 2; opacity: 0.8;">
+                <p>ctrl + r : new root page</p>
+                <p>ctrl + b : new branch page</p>
+                <p>ctrl + l : toggle sidebar</p>
+                <p>ctrl + m : dark/light mode</p>
+                <p>ctrl + d : delete page hierarchy</p>
+                <p>ctrl + h : hotkeys page</p>
+                <p>esc      : exit treemap</p>
+            </div>`;
+        c.contentEditable = false;
+        renderTree();
+      }
+
+      function exportJSON() {
+        const blob = new Blob([JSON.stringify(pages)], { type: "application/json" });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `backup.json`;
+        a.click();
+      }
+
+      function importJSON() {
+        const i = document.createElement('input');
+        i.type = 'file';
+        i.onchange = e => {
+          const r = new FileReader();
+          r.onload = ev => {
+            const imp = JSON.parse(ev.target.result);
+            const tx = db.transaction("pages", "readwrite");
+            imp.forEach(p => tx.objectStore("pages").put(p));
+            tx.oncomplete = () => location.reload();
+          };
+          r.readAsText(e.target.files[0]);
+        };
+        i.click();
+      }
+    </script>
+  </body>
+
+</html>
