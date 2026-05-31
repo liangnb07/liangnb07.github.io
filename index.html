@@ -194,33 +194,58 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-
     const GH_USER = "liangnb07"; 
     const GH_REPO = "liangnb07.github.io";  
 
-    const TARGET_URL = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?per_page=100`;
+    // Calculate time windows
+    const today = new Date();
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
+    
+    // Convert to ISO string format required by GitHub (YYYY-MM-DDTHH:MM:SSZ)
+    const sinceDate = oneYearAgo.toISOString();
 
-    fetch(TARGET_URL)
-        .then(response => {
-            if (!response.ok) throw new Error("Failed to fetch GitHub commits");
-            return response.json();
-        })
-        .then(commits => {
-            // Extract just the 'YYYY-MM-DD' text from each commit date
-            const myUpdateDates = commits.map(c => c.commit.committer.date.substring(0, 10));
+    const dateCounts = {};
+    let page = 1;
 
-            // Tally the number of pushes/commits per day
-            const dateCounts = {};
-            myUpdateDates.forEach(date => { 
-                dateCounts[date] = (dateCounts[date] || 0) + 1; 
+    // Recursive function to fetch ALL commits from the past year across multiple pages
+    function fetchCommits() {
+        const TARGET_URL = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?per_page=100&page=${page}&since=${sinceDate}`;
+
+        fetch(TARGET_URL)
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to fetch GitHub commits");
+                return response.json();
+            })
+            .then(commits => {
+                if (commits.length === 0) {
+                    // No more commits left to read, proceed to draw the map
+                    renderHeatmap(dateCounts);
+                    return;
+                }
+
+                // Process the current page of commits
+                commits.forEach(c => {
+                    const dateString = c.commit.committer.date.substring(0, 10);
+                    dateCounts[dateString] = (dateCounts[dateString] || 0) + 1;
+                });
+
+                // If we got a full page of 100, there's likely more data on the next page
+                if (commits.length === 100) {
+                    page++;
+                    fetchCommits();
+                } else {
+                    // Finished reading the final page
+                    renderHeatmap(dateCounts);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById("heatmap-stats").innerText = "无法加载 GitHub 更新记录";
             });
+    }
 
-            renderHeatmap(dateCounts);
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById("heatmap-stats").innerText = "无法加载 GitHub 更新记录";
-        });
+    fetchCommits();
 });
 
 function renderHeatmap(dateCounts) {
