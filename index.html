@@ -29,6 +29,7 @@
         <li>female, post '10s</li>
         <li>Pisces, INTJ-A 8w9 854 sp/sx RCOEI LVFE</li>
         <li>biromantic, heterosexual gray-aroace</li>
+        <li>SSS-tier larper</li>
     </ul>
     <h2>hobbies:</h2>
             <ul>
@@ -193,80 +194,100 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Simulated input array matching your update logs
-            const myUpdateDates = [
-                "2026-05-30", "2026-05-29", "2026-05-28", "2026-05-20"
-            ];
-        
+
+    const GH_USER = "liangnb07"; 
+    const GH_REPO = "liangnb07.github.io";  
+
+    const TARGET_URL = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?per_page=100`;
+
+    fetch(TARGET_URL)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch GitHub commits");
+            return response.json();
+        })
+        .then(commits => {
+            // Extract just the 'YYYY-MM-DD' text from each commit date
+            const myUpdateDates = commits.map(c => c.commit.committer.date.substring(0, 10));
+
+            // Tally the number of pushes/commits per day
             const dateCounts = {};
-            myUpdateDates.forEach(date => { dateCounts[date] = (dateCounts[date] || 0) + 1; });
-        
-            const gridContainer = document.getElementById("heatmap-grid");
-            const statsHeader = document.getElementById("heatmap-stats");
-            
-            const today = new Date();
-            const oneYearAgo = new Date();
-            oneYearAgo.setFullYear(today.getFullYear() - 1);
-        
-            // Shift calendar start point back to a Monday to fix the alignment shift
-            const startDate = new Date(oneYearAgo);
-            const dayOfWeek = startDate.getDay(); 
-            const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
-            startDate.setDate(startDate.getDate() - distanceToMonday);
-        
-            // Shift calendar end point forward to a Sunday so the grid finishes cleanly
-            const endDate = new Date(today);
-            const endDayOfWeek = endDate.getDay();
-            const distanceToSunday = endDayOfWeek === 0 ? 0 : 7 - endDayOfWeek;
-            endDate.setDate(endDate.getDate() + distanceToSunday);
-        
-            let uniqueActiveDays = 0;
-            const fragment = document.createDocumentFragment();
-            const tempDate = new Date(startDate);
-        
-            while (tempDate <= endDate) {
-                const yyyy = tempDate.getFullYear();
-                const mm = String(tempDate.getMonth() + 1).padStart(2, '0');
-                const dd = String(tempDate.getDate()).padStart(2, '0');
-                const dateString = `${yyyy}-${mm}-${dd}`;
-        
-                const count = dateCounts[dateString] || 0;
-                
-                // Build the cube
-                const cube = document.createElement("div");
-                cube.className = "cube";
-                
-                // Treat days past today but within the trailing week layout window as empty placeholders
-                if (tempDate > today) {
-                    cube.classList.add("level-0");
-                    cube.style.opacity = "0.2"; // Visual hint that these are future days
-                    cube.title = `${yyyy}年${mm}月${dd}日 (未到来)`;
-                } else {
-                    if (count > 0) uniqueActiveDays++;
-                    
-                    let level = 0;
-                    if (count >= 1 && count <= 2) level = 1;
-                    else if (count >= 3 && count <= 4) level = 2;
-                    else if (count >= 5 && count <= 6) level = 3;
-                    else if (count >= 7) level = 4;
-                    
-                    cube.classList.add(`level-${level}`);
-                    cube.title = `${yyyy}年${mm}月${dd}日: ${count} 次更新`;
-                }
-        
-                fragment.appendChild(cube);
-                tempDate.setDate(tempDate.getDate() + 1);
-            }
-        
-            gridContainer.appendChild(fragment);
-            statsHeader.innerText = `过去一年共坚持更新了 ${uniqueActiveDays} 天 (Updated ${uniqueActiveDays} days in the past year)`;
-        
-            // Snap view container to focus on the most recent tracking days on load
-            setTimeout(() => {
-                const scrollContainer = document.getElementById('heatmap-scroll-container');
-                if (scrollContainer) scrollContainer.scrollLeft = scrollContainer.scrollWidth;
-            }, 100);
+            myUpdateDates.forEach(date => { 
+                dateCounts[date] = (dateCounts[date] || 0) + 1; 
+            });
+
+            renderHeatmap(dateCounts);
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("heatmap-stats").innerText = "无法加载 GitHub 更新记录";
         });
+});
+
+function renderHeatmap(dateCounts) {
+    const gridContainer = document.getElementById("heatmap-grid");
+    const statsHeader = document.getElementById("heatmap-stats");
+    
+    const today = new Date();
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+    const startDate = new Date(oneYearAgo);
+    const dayOfWeek = startDate.getDay(); 
+    const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
+    startDate.setDate(startDate.getDate() - distanceToMonday);
+
+    // Push forward to the nearest Sunday for a clean right edge alignment
+    const endDate = new Date(today);
+    const endDayOfWeek = endDate.getDay();
+    const distanceToSunday = endDayOfWeek === 0 ? 0 : 7 - endDayOfWeek;
+    endDate.setDate(endDate.getDate() + distanceToSunday);
+
+    let uniqueActiveDays = 0;
+    const fragment = document.createDocumentFragment();
+    const tempDate = new Date(startDate);
+
+    while (tempDate <= endDate) {
+        const yyyy = tempDate.getFullYear();
+        const mm = String(tempDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(tempDate.getDate()).padStart(2, '0');
+        const dateString = `${yyyy}-${mm}-${dd}`;
+
+        const count = dateCounts[dateString] || 0;
+        const cube = document.createElement("div");
+        cube.className = "cube";
+        
+        // Hide future days extending past the current day
+        if (tempDate > today) {
+            cube.classList.add("level-0");
+            cube.style.opacity = "0.15";
+            cube.title = `${yyyy}年${mm}月${dd}日 (尚未到来)`;
+        } else {
+            if (count > 0) uniqueActiveDays++;
+            
+            // Map commit/push counts to shading densities
+            let level = 0;
+            if (count >= 1 && count <= 2) level = 1;      // 1-2 pushes
+            else if (count >= 3 && count <= 4) level = 2; // 3-4 pushes
+            else if (count >= 5 && count <= 6) level = 3; // 5-6 pushes
+            else if (count >= 7) level = 4;               // 7+ pushes
+            
+            cube.classList.add(`level-${level}`);
+            cube.title = `${yyyy}年${mm}月${dd}日: 提交代码 ${count} 次`;
+        }
+
+        fragment.appendChild(cube);
+        tempDate.setDate(tempDate.getDate() + 1);
+    }
+
+    gridContainer.appendChild(fragment);
+    statsHeader.innerText = `过去一年网站共代码迭代了 ${uniqueActiveDays} 天 (Updated ${uniqueActiveDays} days in the past year)`;
+
+    // Instantly scroll the viewer container to focus on the most recent tracking days on load
+    setTimeout(() => {
+        const scrollContainer = document.getElementById('heatmap-scroll-container');
+        if (scrollContainer) scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+    }, 100);
+}
     </script>
 </body>
 
