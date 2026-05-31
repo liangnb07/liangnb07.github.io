@@ -38,5 +38,6 @@ function injectNavbar() {
         <a href="${prefix}blog/index.html">blog</a> |
         <a href="${prefix}photos/index.html">photos</a> |
         <a href="${prefix}projects/index.html">projects</a> |
-        <a href="https://liang.atabook.org" target="_blank" rel="noopener noreferrer">contact</a>    `;
+        <a href="https://liang.atabook.org" target="_blank" rel="noopener noreferrer">contact</a>    
+    `;
 }

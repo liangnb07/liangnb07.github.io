@@ -1,26 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!--home-->
-        <meta charset = "UTF-8">
-        <title>liangnb07 home</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="script.js" defer></script>
 
-        <!--fonts-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<head>
+    <!--home-->
+    <meta charset="UTF-8">
+    <title>liangnb07 home</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
-    </head>
-    <!--python3 -m http.server 8080-->
-    <body>
-        <h1>home</h1>
-        <nav></nav>
-        <p></p>
-        <!--sudo apt install imagemagick-->
-    </body>
+    <!--fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<!--python3 -m http.server 8080-->
+
+<body>
+    <h1>home</h1>
+    <nav></nav>
+    <p></p>
+    <!--sudo apt install imagemagick-->
+    <h2>Who am I?</h2>
+    <ul>
+        <li>Pisces, INTJ-A 8w9 854 sp/sx RCOEI LVFE</li>
+        <li>biromantic, heterosexual gray-aroace</li>
+    </ul>
+    <h2>Update Frequency log</h2>
+
+    <div class="heatmap-container">
+        <h3 id="heatmap-stats">过去一年共坚持更新了 0 天</h3>
+
+        <div class="heatmap-wrapper">
+            <div class="week-labels">
+                <span>周一</span>
+                <span>周二</span>
+                <span>周三</span>
+                <span>周四</span>
+                <span>周五</span>
+                <span>周六</span>
+                <span>周日</span>
+            </div>
+
+            <div id="heatmap-scroll-container" class="scroll-wrapper">
+                <div id="heatmap-grid" class="github-heatmap"></div>
+            </div>
+        </div>
+
+        <div class="heatmap-footer">
+            <span>过去一年的更新频率记录</span>
+            <div class="heatmap-legend">
+                <span>少</span>
+                <div class="cube level-0"></div>
+                <div class="cube level-1"></div>
+                <div class="cube level-2"></div>
+                <div class="cube level-3"></div>
+                <div class="cube level-4"></div>
+                <span>多</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --cube-size: 12px;
+            --cube-gap: 3px;
+        }
+        
+        .heatmap-container {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            padding: 20px;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            max-width: 820px;
+            background: #ffffff;
+            color: #24292f;
+            user-select: none;
+        }
+        
+        #heatmap-stats {
+            margin: 0 0 12px 0;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .heatmap-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        /* Explicit 7-row sizing to align with every cube */
+        .week-labels {
+            display: grid;
+            grid-template-rows: repeat(7, var(--cube-size));
+            grid-gap: var(--cube-gap);
+            font-size: 9px;
+            color: #888;
+            line-height: var(--cube-size);
+            padding-top: 0px; /* Perfectly aligned with Row 1 (Monday) */
+        }
+        
+        .scroll-wrapper {
+            overflow-x: auto;
+            flex-grow: 1;
+            padding-bottom: 5px;
+        }
+        
+        .github-heatmap {
+            display: grid;
+            grid-template-rows: repeat(7, var(--cube-size));
+            grid-auto-flow: column;
+            grid-auto-columns: var(--cube-size);
+            grid-gap: var(--cube-gap);
+        }
+        
+        /* Cubes and Shading levels */
+        .cube {
+            width: var(--cube-size);
+            height: var(--cube-size);
+            border-radius: 2px;
+            background-color: #ebedf0;
+            outline: 1px solid rgba(27,31,35,0.04);
+            transition: transform 0.1s ease;
+            box-sizing: border-box;
+        }
+        
+        .cube:hover {
+            transform: scale(1.25);
+            outline: 1px solid #888;
+            z-index: 10;
+        }
+        
+        .level-0 { background-color: #ebedf0; }
+        .level-1 { background-color: #c0c0c0; }
+        .level-2 { background-color: #969696; }
+        .level-3 { background-color: #666666; }
+        .level-4 { background-color: #1b1f23; }
+        
+        .heatmap-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #57606a;
+        }
+        
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .heatmap-legend span { font-size: 10px; margin: 0 2px; }
+        
+        /* Scrollbar polish */
+        .scroll-wrapper::-webkit-scrollbar { height: 4px; }
+        .scroll-wrapper::-webkit-scrollbar-thumb { background: #d0d7de; border-radius: 10px; }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Simulated input array matching your update logs
+            const myUpdateDates = [
+                "2026-05-30", "2026-05-29", "2026-05-28", "2026-05-20"
+            ];
+        
+            const dateCounts = {};
+            myUpdateDates.forEach(date => { dateCounts[date] = (dateCounts[date] || 0) + 1; });
+        
+            const gridContainer = document.getElementById("heatmap-grid");
+            const statsHeader = document.getElementById("heatmap-stats");
+            
+            const today = new Date();
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(today.getFullYear() - 1);
+        
+            // Shift calendar start point back to a Monday to fix the alignment shift
+            const startDate = new Date(oneYearAgo);
+            const dayOfWeek = startDate.getDay(); 
+            const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
+            startDate.setDate(startDate.getDate() - distanceToMonday);
+        
+            // Shift calendar end point forward to a Sunday so the grid finishes cleanly
+            const endDate = new Date(today);
+            const endDayOfWeek = endDate.getDay();
+            const distanceToSunday = endDayOfWeek === 0 ? 0 : 7 - endDayOfWeek;
+            endDate.setDate(endDate.getDate() + distanceToSunday);
+        
+            let uniqueActiveDays = 0;
+            const fragment = document.createDocumentFragment();
+            const tempDate = new Date(startDate);
+        
+            while (tempDate <= endDate) {
+                const yyyy = tempDate.getFullYear();
+                const mm = String(tempDate.getMonth() + 1).padStart(2, '0');
+                const dd = String(tempDate.getDate()).padStart(2, '0');
+                const dateString = `${yyyy}-${mm}-${dd}`;
+        
+                const count = dateCounts[dateString] || 0;
+                
+                // Build the cube
+                const cube = document.createElement("div");
+                cube.className = "cube";
+                
+                // Treat days past today but within the trailing week layout window as empty placeholders
+                if (tempDate > today) {
+                    cube.classList.add("level-0");
+                    cube.style.opacity = "0.2"; // Visual hint that these are future days
+                    cube.title = `${yyyy}年${mm}月${dd}日 (未到来)`;
+                } else {
+                    if (count > 0) uniqueActiveDays++;
+                    
+                    let level = 0;
+                    if (count >= 1 && count <= 2) level = 1;
+                    else if (count >= 3 && count <= 4) level = 2;
+                    else if (count >= 5 && count <= 6) level = 3;
+                    else if (count >= 7) level = 4;
+                    
+                    cube.classList.add(`level-${level}`);
+                    cube.title = `${yyyy}年${mm}月${dd}日: ${count} 次更新`;
+                }
+        
+                fragment.appendChild(cube);
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
+        
+            gridContainer.appendChild(fragment);
+            statsHeader.innerText = `过去一年共坚持更新了 ${uniqueActiveDays} 天`;
+        
+            // Snap view container to focus on the most recent tracking days on load
+            setTimeout(() => {
+                const scrollContainer = document.getElementById('heatmap-scroll-container');
+                if (scrollContainer) scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+            }, 100);
+        });
+    </script>
+</body>
+
 </html>
