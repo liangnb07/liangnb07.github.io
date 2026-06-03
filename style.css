@@ -2,13 +2,6 @@
 Global
 ================================*/
 
-.vt323-regular {
-  font-family: "VT323", monospace;
-  font-weight: 400;
-  font-style: normal;
-}
-
-
 .doto-uniquifier {
   font-family: "Doto", sans-serif;
   font-optical-sizing: auto;
@@ -24,7 +17,7 @@ html, body, nav{
 
 h1 {    
     font-family: "Doto", sans-serif;
-    font-size: 3rem;
+    font-size: 4rem;
     margin-bottom: 10px;
     margin-left: 5px;
     display: inline-block;

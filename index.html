@@ -292,12 +292,12 @@ function renderHeatmap(dateCounts) {
             // Map commit/push counts to shading densities
             let level = 0;
             if (count >= 1 && count <= 2) level = 1;      // 1-2 pushes
-            else if (count >= 3 && count <= 4) level = 2; // 3-4 pushes
-            else if (count >= 5 && count <= 6) level = 3; // 5-6 pushes
-            else if (count >= 7) level = 4;               // 7+ pushes
+            else if (count >= 3 && count <= 6) level = 2; // 3-6 pushes
+            else if (count >= 7 && count <= 12) level = 3; // 7-12 pushes 
+            else if (count >= 12) level = 4;               // 12+ pushes
             
             cube.classList.add(`level-${level}`);
-            cube.title = `${yyyy}年${mm}月${dd}日: 提交代码 ${count} 次`;
+            cube.title = `${yyyy}年${mm}月${dd}日: 提交代码 ${count} 次`; 
         }
 
         fragment.appendChild(cube);

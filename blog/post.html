@@ -5,7 +5,7 @@
         <meta charset = "UTF-8">
         <title>liangnb07</title>
         <link rel="stylesheet" href="../style.css">
-        <script src="script.js" defer></script>
+        <script src="../script.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
         <!--fonts-->
@@ -19,7 +19,6 @@
     </head>
     <!--python3 -m http.server 8080-->
     <body>
-        <h1>post</h1>
         <nav></nav>
         <div id="nav-container"></div> 
 
@@ -31,7 +30,7 @@
 
     <script>
         async function loadMarkdownPost() {
-            // 获取 URL 中的查询参数（例如 ?file=reflections/052926.md）
+            // 获取 URL 中的查询参数（例如 ?file=reflections/052926.md）  
             const urlParams = new URLSearchParams(window.location.search);
             const markdownFile = urlParams.get('file');
 
