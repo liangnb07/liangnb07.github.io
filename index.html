@@ -2,13 +2,11 @@
 <html lang="en">
 
 <head>
-    <!--home-->
     <meta charset="UTF-8">
     <title>liangnb07 home</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 
-    <!--fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
@@ -17,13 +15,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap" rel="stylesheet">
 </head>
-<!--python3 -m http.server 8080-->
-
 <body>
     <h1>home</h1>
     <nav></nav>
     <p></p>
-    <!--sudo apt install imagemagick-->
     <h2>Who am I?</h2>
     <ul>
         <li>female, post '10s</li>
@@ -32,31 +27,31 @@
         <li>kuudere (?)</li>
     </ul>
     <h2>hobbies:</h2>
+    <ul>
+        <li>violin (currently playing: Kreisler Praeludium and Allegro, last updated: 2026-05-31)</li>
+        <li>hardware modding: i want to buy the x230 on the aftermarket and install the 7 row keyboard mod and ips screen on it. more in blog/thinkpad/x230.</li>
+        <li>programming: i enjoy finding out how the things we use work. including websites.</li>
+        <li>photography: currently owns the Nikon D200, planning on buying Fujifilm Finepix F550EXR (i'm too broke, but i'd really, really like a Hasselblad) check out the photos page too.</li>
+        <li>i like to watch <u>c-dramas</u> and i like manhua, manhwa, webnovels, expecially <u>danmei</u>. my list, in no particular order: (last update: 2026-05-31)
             <ul>
-                <li>violin (currently playing: Kreisler Praeludium and Allegro, last updated: 2026-05-31)</li>
-                <li>hardware modding: i want to buy the x230 on the aftermarket and install the 7 row keyboard mod and ips screen on it. more in blog/thinkpad/x230.</li>
-                <li>programming: i enjoy finding out how the things we use work. including websites.</li>
-                <li>photography: currently owns the Nikon D200, planning on buying Fujifilm Finepix F550EXR (i'm too broke, but i'd really, really like a Hasselblad) check out the photos page too.</li>
-                <li>i like to watch <u>c-dramas</u> and i like manhua, manhwa, webnovels, expecially <u>danmei</u>. my list, in no particular order: (last update: 2026-05-31)
-                    <ul>
-                        <li>Revenged Love</li>
-                        <li>Omniscient Reader's Viewpoint</li>
-                        <li>Link Click</li>
-                        <li>MDZS/Grandmaster of Demonic Cultivation</li>
-                        <li>SVSSS/Scumbag Villan's Self-Saving System</li>
-                        <li>Return of the Mount Hua Sect/Return of the Blossoming Blade</li>
-                    </ul>
-                </li>
-                <li>audiophile: (wannabe) currently i own a pair of tangzu wan'er's, ver 2 jade studio edition. i really want a hiby r4, linsoul altaea 4.4mm bal cable, EW300. saving money lol.</li>
+                <li>Revenged Love</li>
+                <li>Omniscient Reader's Viewpoint</li>
+                <li>Link Click</li>
+                <li>MDZS/Grandmaster of Demonic Cultivation</li>
+                <li>SVSSS/Scumbag Villan's Self-Saving System</li>
+                <li>Return of the Mount Hua Sect/Return of the Blossoming Blade</li>
             </ul>
+        </li>
+        <li>audiophile: (wannabe) currently i own a pair of tangzu wan'er's, ver 2 jade studio edition. i really want a hiby r4, linsoul altaea 4.4mm bal cable, EW300. saving money lol.</li>
+    </ul>
         
     <h3>currently reading: (last update: 2026-05-31)</h3>
-        <ul>                
-            <li>C++ For Lazy Programmers (Briggs)</li>
-            <li>The Art of Spending Money (Housel)</li>
-            <li>Crime and Punishment (Dostoevsky)</li>
-            <li>Blockchain for Dummies (Laurence)</li>
-        </ul>
+    <ul>                
+        <li>C++ For Lazy Programmers (Briggs)</li>
+        <li>The Art of Spending Money (Housel)</li>
+        <li>Crime and Punishment (Dostoevsky)</li>
+        <li>Blockchain for Dummies (Laurence)</li>
+    </ul>
         
         
     <h2>Update Frequency log</h2>
@@ -105,10 +100,12 @@
             padding: 20px;
             border: 1px solid #d0d7de;
             border-radius: 6px;
-            max-width: 820px;
+            width: max-content;
+            max-width: 100%;
             background: #ffffff;
             color: #24292f;
             user-select: none;
+            box-sizing: border-box;
         }
         
         #heatmap-stats {
@@ -123,7 +120,6 @@
             gap: 10px;
         }
         
-        /* Explicit 7-row sizing to align with every cube */
         .week-labels {
             display: grid;
             grid-template-rows: repeat(7, var(--cube-size));
@@ -131,24 +127,23 @@
             font-size: 9px;
             color: #888;
             line-height: var(--cube-size);
-            padding-top: 0px; /* Perfectly aligned with Row 1 (Monday) */
+            padding-top: 0px;
         }
         
         .scroll-wrapper {
-            overflow-x: auto;
-            flex-grow: 1;
+            overflow: visible; 
+            display: block;
             padding-bottom: 5px;
         }
         
         .github-heatmap {
             display: grid;
-            grid-template-rows: repeat(7, var(--cube-s ize));
+            grid-template-rows: repeat(7, var(--cube-size)); 
             grid-auto-flow: column;
-            grid-auto-columns: var(--cube-size);
+            grid-auto-columns: var(--cube-size); 
             grid-gap: var(--cube-gap);
         }
         
-        /* Cubes and Shading levels */
         .cube {
             width: var(--cube-size);
             height: var(--cube-size);
@@ -187,132 +182,114 @@
         }
         .heatmap-legend span { font-size: 10px; margin: 0 2px; }
         
-        /* Scrollbar polish */
         .scroll-wrapper::-webkit-scrollbar { height: 4px; }
         .scroll-wrapper::-webkit-scrollbar-thumb { background: #d0d7de; border-radius: 10px; }
     </style>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-    const GH_USER = "liangnb07"; 
-    const GH_REPO = "liangnb07.github.io";  
+            const GH_USER = "liangnb07"; 
+            const GH_REPO = "liangnb07.github.io";  
 
-    // Calculate time windows
-    const today = new Date();
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(today.getFullYear() - 1);
-    
-    // Convert to ISO string format required by GitHub (YYYY-MM-DDTHH:MM:SSZ)
-    const sinceDate = oneYearAgo.toISOString();
+            const today = new Date();
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(today.getFullYear() - 1);
+            
+            const sinceDate = oneYearAgo.toISOString();
+            const dateCounts = {};
+            let page = 1;
 
-    const dateCounts = {};
-    let page = 1;
+            function fetchCommits() {
+                const TARGET_URL = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?per_page=100&page=${page}&since=${sinceDate}`;
 
-    // Recursive function to fetch ALL commits from the past year across multiple pages
-    function fetchCommits() {
-        const TARGET_URL = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits?per_page=100&page=${page}&since=${sinceDate}`;
+                fetch(TARGET_URL)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Failed to fetch GitHub commits");
+                        return response.json();
+                    })
+                    .then(commits => {
+                        if (commits.length === 0) {
+                            renderHeatmap(dateCounts);
+                            return;
+                        }
 
-        fetch(TARGET_URL)
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to fetch GitHub commits");
-                return response.json();
-            })
-            .then(commits => {
-                if (commits.length === 0) {
-                    // No more commits left to read, proceed to draw the map
-                    renderHeatmap(dateCounts);
-                    return;
-                }
+                        commits.forEach(c => {
+                            const dateString = c.commit.committer.date.substring(0, 10);
+                            dateCounts[dateString] = (dateCounts[dateString] || 0) + 1;
+                        });
 
-                // Process the current page of commits
-                commits.forEach(c => {
-                    const dateString = c.commit.committer.date.substring(0, 10);
-                    dateCounts[dateString] = (dateCounts[dateString] || 0) + 1;
-                });
+                        if (commits.length === 100) {
+                            page++;
+                            fetchCommits();
+                        } else {
+                            renderHeatmap(dateCounts);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        document.getElementById("heatmap-stats").innerText = "无法加载 GitHub 更新记录";
+                    });
+            }
 
-                // If we got a full page of 100, there's likely more data on the next page
-                if (commits.length === 100) {
-                    page++;
-                    fetchCommits();
+            fetchCommits();
+        });
+
+        function renderHeatmap(dateCounts) {
+            const gridContainer = document.getElementById("heatmap-grid");
+            const statsHeader = document.getElementById("heatmap-stats");
+            
+            const today = new Date();
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+            const startDate = new Date(oneYearAgo);
+            const dayOfWeek = startDate.getDay(); 
+            const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
+            startDate.setDate(startDate.getDate() - distanceToMonday);
+
+            const endDate = new Date(today);
+            const endDayOfWeek = endDate.getDay();
+            const distanceToSunday = endDayOfWeek === 0 ? 0 : 7 - endDayOfWeek;
+            endDate.setDate(endDate.getDate() + distanceToSunday);
+
+            let uniqueActiveDays = 0;
+            const fragment = document.createDocumentFragment();
+            const tempDate = new Date(startDate);
+
+            while (tempDate <= endDate) {
+                const yyyy = tempDate.getFullYear();
+                const mm = String(tempDate.getMonth() + 1).padStart(2, '0');
+                const dd = String(tempDate.getDate()).padStart(2, '0');
+                const dateString = `${yyyy}-${mm}-${dd}`;
+
+                const count = dateCounts[dateString] || 0;
+                const cube = document.createElement("div");
+                cube.className = "cube";
+                
+                if (tempDate > today) {
+                    cube.classList.add("level-0");
+                    cube.style.opacity = "0.15";
+                    cube.title = `${yyyy}年${mm}月${dd}日 (尚未到来)`;
                 } else {
-                    // Finished reading the final page
-                    renderHeatmap(dateCounts);
+                    if (count > 0) uniqueActiveDays++;
+                    
+                    let level = 0;
+                    if (count >= 1 && count <= 2) level = 1;
+                    else if (count >= 3 && count <= 6) level = 2;
+                    else if (count >= 7 && count <= 12) level = 3;
+                    else if (count >= 12) level = 4;
+                    
+                    cube.classList.add(`level-${level}`);
+                    cube.title = `${yyyy}年${mm}月${dd}日: 提交代码 ${count} 次`; 
                 }
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById("heatmap-stats").innerText = "无法加载 GitHub 更新记录";
-            });
-    }
 
-    fetchCommits();
-});
+                fragment.appendChild(cube);
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
 
-function renderHeatmap(dateCounts) {
-    const gridContainer = document.getElementById("heatmap-grid");
-    const statsHeader = document.getElementById("heatmap-stats");
-    
-    const today = new Date();
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(today.getFullYear() - 1);
-
-    const startDate = new Date(oneYearAgo);
-    const dayOfWeek = startDate.getDay(); 
-    const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; 
-    startDate.setDate(startDate.getDate() - distanceToMonday);
-
-    // Push forward to the nearest Sunday for a clean right edge alignment
-    const endDate = new Date(today);
-    const endDayOfWeek = endDate.getDay();
-    const distanceToSunday = endDayOfWeek === 0 ? 0 : 7 - endDayOfWeek;
-    endDate.setDate(endDate.getDate() + distanceToSunday);
-
-    let uniqueActiveDays = 0;
-    const fragment = document.createDocumentFragment();
-    const tempDate = new Date(startDate);
-
-    while (tempDate <= endDate) {
-        const yyyy = tempDate.getFullYear();
-        const mm = String(tempDate.getMonth() + 1).padStart(2, '0');
-        const dd = String(tempDate.getDate()).padStart(2, '0');
-        const dateString = `${yyyy}-${mm}-${dd}`;
-
-        const count = dateCounts[dateString] || 0;
-        const cube = document.createElement("div");
-        cube.className = "cube";
-        
-        // Hide future days extending past the current day
-        if (tempDate > today) {
-            cube.classList.add("level-0");
-            cube.style.opacity = "0.15";
-            cube.title = `${yyyy}年${mm}月${dd}日 (尚未到来)`;
-        } else {
-            if (count > 0) uniqueActiveDays++;
-            
-            // Map commit/push counts to shading densities
-            let level = 0;
-            if (count >= 1 && count <= 2) level = 1;      // 1-2 pushes
-            else if (count >= 3 && count <= 6) level = 2; // 3-6 pushes
-            else if (count >= 7 && count <= 12) level = 3; // 7-12 pushes 
-            else if (count >= 12) level = 4;               // 12+ pushes
-            
-            cube.classList.add(`level-${level}`);
-            cube.title = `${yyyy}年${mm}月${dd}日: 提交代码 ${count} 次`; 
+            gridContainer.appendChild(fragment);
+            statsHeader.innerText = `过去一年网站共代码迭代了 ${uniqueActiveDays} 天 (Updated ${uniqueActiveDays} days in the past year)`;
         }
-
-        fragment.appendChild(cube);
-        tempDate.setDate(tempDate.getDate() + 1);
-    }
-
-    gridContainer.appendChild(fragment);
-    statsHeader.innerText = `过去一年网站共代码迭代了 ${uniqueActiveDays} 天 (Updated ${uniqueActiveDays} days in the past year)`;
-
-    // Instantly scroll the viewer container to focus on the most recent tracking days on load
-    setTimeout(() => {
-        const scrollContainer = document.getElementById('heatmap-scroll-container');
-        if (scrollContainer) scrollContainer.scrollLeft = scrollContainer.scrollWidth;
-    }, 100);
-}
     </script>
 
     <p style="font-size: 10px; color: red;">*functionality of the heatmap is limited to the access of github.com*</p>

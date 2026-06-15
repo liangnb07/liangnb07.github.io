@@ -3,7 +3,7 @@
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    //run navbar
+    // Run navbar safely exactly once when the DOM is fully loaded
     try {
         injectNavbar();
     } catch (e) {
@@ -13,26 +13,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function injectNavbar() {
     const navElement = document.querySelector("nav");
-    if (!navElement) return; // Exit early if no nav tag
+    if (!navElement) return; 
 
-    // get current pathname
     const path = window.location.pathname;
-    const pathSegments = path.split('/').filter(segment => segment.length > 0);
-
-    //count how many folders deep we are
-    let depth = pathSegments.length;
-    if (pathSegments[pathSegments.length - 1].includes('.')) {
-        depth -= 1;
+    
+    // Split path into segments and clean out empty values
+    let segments = path.split('/').filter(s => s.length > 0);
+    
+    // If hosting on a subpath (like a project page), remove repo name if it appears
+    if (segments[0] === 'liangnb07.github.io') {
+        segments.shift();
     }
 
-    if (pathSegments[0] === 'liangnb07.github.io') {
-        depth -= 1;
+    // CRITICAL FIX: If the last segment is an actual file name (ends with .html), 
+    // it doesn't count as a directory layer, so we pop it off.
+    if (segments.length > 0 && segments[segments.length - 1].includes('.html')) {
+        segments.pop();
     }
 
-    //generate number of ../ needed to hit root
-    const prefix = "../".repeat(Math.max(0, depth));
+    // The length of remaining segments tells us exactly how deep we are
+    const depth = segments.length;
+    const prefix = "../".repeat(depth);
 
-    //injection
+    // Injection
     navElement.innerHTML = `
         <a href="${prefix}index.html">home</a> |
         <a href="${prefix}blog/index.html">blog</a> |
