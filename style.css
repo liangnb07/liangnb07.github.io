@@ -2,37 +2,36 @@
 Global
 ================================*/
 
-.doto-uniquifier {
-  font-family: "Doto", sans-serif;
-  font-optical-sizing: auto;
-    font-style: normal;
-  font-variation-settings: "ROND" 0;
+
+body {
+  font-family: "JetBrains Mono", monospace;
 }
 
 html, body, nav{
     font-size: 1rem;
-    font-weight:900;
-    font-family: "Doto", sans-serif;
+    font-weight:500;
+    font-family: "", sans-serif;
 }
 
 h1 {    
-    font-family: "Doto", sans-serif;
+    font-family: "", sans-serif;
     font-size: 4rem;
     margin-bottom: 10px;
     margin-left: 5px;
     display: inline-block;
     transform-origin: left;
+    font-weight: 500;
 }
 
 p, ul li {
     font-size: 0.9rem;
     max-width: 90%;
-    font-family: "Doto", sans-serif;
+    font-family: "", sans-serif;
 }
 
 nav {
     font-size: 0.8rem;
-    font-family: "Doto", sans-serif;
+    font-family: "", sans-serif;
     margin-left: 5px;
 }
 
