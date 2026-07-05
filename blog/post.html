@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!--home-->
         <meta charset = "UTF-8">
         <title>liangnb07</title>
         <link rel="stylesheet" href="../style.css">
         <script src="../script.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        <!--fonts-->
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=:wght@100..900&display=swap" rel="stylesheet">
     </head>
-    <!--python3 -m http.server 8080-->
+
     <body>
         <nav></nav>
         <div id="nav-container"></div> 
 
     <main>
+        <div class="container">
         <article id="content">
             <p style="color: gray;">文章加载中...</p>
         </article>
+        </div>
     </main>
 
     <script>
@@ -49,7 +41,6 @@
 
         let markdownText = await response.text();
         
-        // 1. Find and extract the H1 title (e.g., # Nikon D200)
         const lines = markdownText.split('\n');
         let titleText = "";
         let titleIndex = -1;
@@ -62,22 +53,17 @@
             }
         }
 
-        // 2. If an H1 exists, handle it dynamically
         if (titleIndex !== -1) {
-            // Update the browser tab title
+           
             document.title = titleText + " - blog";
 
-            // Create an H1 element and insert it at the very top of the body (above <nav>)
             const h1Element = document.createElement('h1');
             h1Element.textContent = titleText;
             document.body.insertBefore(h1Element, document.body.firstChild);
-
-            // Remove the H1 line from the markdown text so it doesn't render twice
             lines.splice(titleIndex, 1);
             markdownText = lines.join('\n');
         }
-        
-        // 3. Render the remaining markdown inside the content area
+
         contentDiv.innerHTML = marked.parse(markdownText);
 
     } catch (error) {
@@ -86,8 +72,9 @@
     }
 }
 
-// Run immediately since the script is at the bottom of the body
 loadMarkdownPost();
     </script>
+
     </body>
+
 </html>
