@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budget</title>
+<title>记账本</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --red: #C81E3A;
@@ -21,10 +21,11 @@
 
   body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'ZCOOL XiaoWei', serif;
     background: #fff;
     color: var(--ink);
     padding: 48px 20px;
+    font-size: 16px;
   }
 
   .container {
@@ -45,7 +46,7 @@
   }
 
   .tab {
-    font-family: 'Inter', sans-serif;
+    font-family: 'ZCOOL XiaoWei', serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--gray);
@@ -78,7 +79,7 @@
   }
 
   input {
-    font-family: 'Inter', sans-serif;
+    font-family: 'ZCOOL XiaoWei', serif;
     font-size: 14px;
     padding: 10px 12px;
     border: 1px solid var(--border);
@@ -99,7 +100,7 @@
   }
 
   button.add-btn {
-    font-family: 'Inter', sans-serif;
+    font-family: 'ZCOOL XiaoWei', serif;
     font-size: 14px;
     font-weight: 600;
     background: var(--red);
@@ -187,7 +188,7 @@
   }
 
   .export-btn {
-    font-family: 'Inter', sans-serif;
+    font-family: 'ZCOOL XiaoWei', serif;
     font-size: 13px;
     font-weight: 500;
     background: none;
@@ -216,34 +217,81 @@
     color: var(--red);
   }
 
+  /* Currency toggle */
+  .currency-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .rate-note {
+    font-size: 12px;
+    color: var(--gray-light);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .currency-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    background: var(--bg-soft);
+  }
+
+  .currency-toggle button {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 13px;
+    border: none;
+    background: none;
+    color: var(--gray);
+    padding: 5px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .currency-toggle button.active {
+    background: var(--red);
+    color: #fff;
+  }
 
 </style>
 </head>
 <body>
 <div class="container">
 
+  <div class="currency-row">
+    <span class="rate-note" id="rate-note"></span>
+    <div class="currency-toggle">
+      <button id="cur-cny" class="active" onclick="setCurrency('CNY')">人民币</button>
+      <button id="cur-usd" onclick="setCurrency('USD')">美元</button>
+    </div>
+  </div>
+
   <div class="tabs">
-    <button class="tab active" data-tab="expenses" onclick="showTab('expenses')">Purchases</button>
-    <button class="tab" data-tab="income" onclick="showTab('income')">Money</button>
+    <button class="tab active" data-tab="expenses" onclick="showTab('expenses')">购物</button>
+    <button class="tab" data-tab="income" onclick="showTab('income')">钱</button>
   </div>
 
   <div class="panel active" id="panel-expenses">
     <div class="entry-row">
       <input type="text" id="expName">
       <input type="number" id="expPrice" step="0.01">
-      <button class="add-btn" onclick="addEntry('expenses')">Add</button>
+      <button class="add-btn" onclick="addEntry('expenses')">添加</button>
     </div>
 
     <table>
       <thead>
-        <tr><th>Date</th><th>Name</th><th class="num">Price</th><th class="del"></th></tr>
+        <tr><th>日期</th><th>名称</th><th class="num">金额</th><th class="del"></th></tr>
       </thead>
       <tbody id="expenses-body"></tbody>
     </table>
 
     <div class="footer-row">
-      <button class="export-btn" id="export-expenses" onclick="exportCSV('expenses')">Export CSV</button>
-      <div><span class="total-label">Total</span><span class="total" id="expenses-total">$0.00</span></div>
+      <button class="export-btn" id="export-expenses" onclick="exportCSV('expenses')">导出 CSV</button>
+      <div><span class="total-label">总计</span><span class="total" id="expenses-total">¥0.00</span></div>
     </div>
   </div>
 
@@ -251,19 +299,19 @@
     <div class="entry-row">
       <input type="text" id="incName">
       <input type="number" id="incPrice" step="0.01">
-      <button class="add-btn" onclick="addEntry('income')">Add</button>
+      <button class="add-btn" onclick="addEntry('income')">添加</button>
     </div>
 
     <table>
       <thead>
-        <tr><th>Date</th><th>Name</th><th class="num">Price</th><th class="del"></th></tr>
+        <tr><th>日期</th><th>名称</th><th class="num">金额</th><th class="del"></th></tr>
       </thead>
       <tbody id="income-body"></tbody>
     </table>
 
     <div class="footer-row">
-      <button class="export-btn" id="export-income" onclick="exportCSV('income')">Export CSV</button>
-      <div><span class="total-label">Total</span><span class="total" id="income-total">$0.00</span></div>
+      <button class="export-btn" id="export-income" onclick="exportCSV('income')">导出 CSV</button>
+      <div><span class="total-label">总计</span><span class="total" id="income-total">¥0.00</span></div>
     </div>
   </div>
 
@@ -304,11 +352,50 @@
   async function init() {
     db = await openDB();
     data = await load();
+    updateRateNote();
+    render();
+    fetchRate();
+  }
+
+  let currency = 'CNY';
+  let exchangeRate = 7.2; // CNY per 1 USD — fallback until live rate loads
+
+  async function fetchRate() {
+    try {
+      const res = await fetch('https://open.er-api.com/v6/latest/USD');
+      const json = await res.json();
+      if (json && json.rates && json.rates.CNY) {
+        exchangeRate = json.rates.CNY;
+      }
+    } catch (e) {
+      // fetch failed (offline, blocked, etc) — keep fallback rate
+    }
+    updateRateNote();
     render();
   }
 
+  function updateRateNote() {
+    document.getElementById('rate-note').textContent = `1 美元 ≈ ${exchangeRate.toFixed(2)} 人民币`;
+  }
+
+  function toDisplay(cnyValue) {
+    return currency === 'CNY' ? cnyValue : cnyValue / exchangeRate;
+  }
+
+  function toCanonical(enteredValue) {
+    return currency === 'CNY' ? enteredValue : enteredValue * exchangeRate;
+  }
+
   function money(n) {
-    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const symbol = currency === 'CNY' ? '¥' : '$';
+    return symbol + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function setCurrency(cur) {
+    currency = cur;
+    document.getElementById('cur-cny').classList.toggle('active', cur === 'CNY');
+    document.getElementById('cur-usd').classList.toggle('active', cur === 'USD');
+    render();
   }
 
   function escapeHtml(str) {
@@ -323,14 +410,15 @@
       body.innerHTML = '';
 
       if (data[type].length === 0) {
-        body.innerHTML = `<tr class="empty-row"><td colspan="4">No ${type} yet</td></tr>`;
+        const label = type === 'expenses' ? '购物' : '钱';
+        body.innerHTML = `<tr class="empty-row"><td colspan="4">还没有${label}记录</td></tr>`;
       } else {
         data[type].forEach((entry, i) => {
           const row = document.createElement('tr');
           row.innerHTML = `
             <td class="date">${entry.date}</td>
             <td>${escapeHtml(entry.name)}</td>
-            <td class="num">${money(entry.price)}</td>
+            <td class="num">${money(toDisplay(entry.price))}</td>
             <td class="del"><button class="del-btn" onclick="removeEntry('${type}', ${i})">✕</button></td>
           `;
           body.appendChild(row);
@@ -338,7 +426,7 @@
       }
 
       const total = data[type].reduce((s, e) => s + e.price, 0);
-      document.getElementById(type + '-total').textContent = money(total);
+      document.getElementById(type + '-total').textContent = money(toDisplay(total));
       document.getElementById('export-' + type).disabled = data[type].length === 0;
     });
   }
@@ -352,7 +440,8 @@
     if (!name || isNaN(price)) return;
     if (type === 'expenses' && price < 0) return;
 
-    data[type].push({ name, price, date: new Date().toISOString().slice(0, 10) });
+    const canonicalPrice = toCanonical(price);
+    data[type].push({ name, price: canonicalPrice, date: new Date().toISOString().slice(0, 10) });
     save();
     render();
     nameInput.value = '';
@@ -368,9 +457,9 @@
 
   function exportCSV(type) {
     if (data[type].length === 0) return;
-    const rows = [['Date', 'Name', 'Price']];
-    data[type].forEach(e => rows.push([e.date, e.name, e.price.toFixed(2)]));
-    rows.push(['', 'Total', data[type].reduce((s, e) => s + e.price, 0).toFixed(2)]);
+    const rows = [['日期', '名称', `金额 (${currency})`]];
+    data[type].forEach(e => rows.push([e.date, e.name, toDisplay(e.price).toFixed(2)]));
+    rows.push(['', '总计', toDisplay(data[type].reduce((s, e) => s + e.price, 0)).toFixed(2)]);
     const csv = rows.map(row =>
       row.map(f => /[",\n]/.test(f) ? '"' + String(f).replace(/"/g, '""') + '"' : f).join(',')
     ).join('\r\n');
