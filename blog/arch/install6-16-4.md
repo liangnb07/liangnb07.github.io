@@ -1,0 +1,249 @@
+# 6.16.4 installation
+
+09.22.2025
+## installing arch manually
+
+### obtain the following:
+-  a copy of the arch linux iso from one of the official mirrors [here](https://archlinux.org/download/)
+-  a tool like [rufus](https://rufus.ie)
+-  8GB+ flash drive
+
+#### dual booting alongside current OS
+at first i did the dual boot with windows 11. but i ended up wiping the entire nvme and reinstalling arch, partly bc my drive was real small and also bc allocating 100+GB of disk space to windows was not better than running a VM in arch.
+
+### in windows 
+
+while still in windows, turn off fast boot/secure boot and disable bitlocker. the latter might take a while. probably like 5-12 minutes.
+
+if bitlocker is active, shrinking partitions could trigger recovery key prompts.
+
+#### disk partitioning
+
+also in windows, press win+x to open disk management. 
+
+right click on C: (your windows partition) and click 'shrink volume'.
+
+how much you want to allocate for arch: 1 GB = 953.67 MiB. windows disk management takes MiB, so convert before you partition.
+
+the space you subtracted from windows should appear as 'unallocated space'
+
+open admin terminal and run:
+`powercfg /h off
+
+to disable hibernation, which cleans up window's ntfs formatting, also prevents filesystem corruption.
+
+### booting into live arch iso
+
+plug in the flash drive, and boot up the computer (it should be in a shut down state before). 
+
+when the logo is loading, press enter/f1/f2/f12 to interrupt boot and/or enter boot menu (not bios)
+
+my flash drive was called Sandisk USB HDD, moved that above Windows bootmgr/windows boot manager in the priority sequence. then save settings and exit, the computer should boot into the live arch iso.
+
+### connect to internet
+
+if you have ethernet cable use that. otherwise, run:
+
+```iwctl```
+
+then the prompt will change to iwd. run:
+
+```device list```
+
+usually it's wlan0, to scan for connections on the network, run:
+
+```station (device name) scan```
+
+this isn't going to print anything but it allows the machine to be able to see the connections in the first place. to see specifically the names of the networks, run:
+
+```station (device name) get-networks```
+
+then connect to your network:
+
+```station (device name) connect (network)```
+
+then enter the password,and test your connection by running: 
+
+```ping archlinux.org```
+
+if success, type 'exit' to return to the iso. 
+
+#### edge case
+
+if the device list is empty, run:
+
+```rfkill unblock all```
+
+this turns wifi on.
+
+### disk setup
+
+first identify your disk with: `lsblk -f
+
+look for:
+
+-the EFI parition, formatted in FAT32
+-Windows NFTS partitions 
+-unallocated space
+
+partition the unallocated space:
+
+```cfdisk /dev/nvme0n1```
+
+(this is assuming your disk is named nvme0n1, unless you have a second drive, then it would be nvme0n2)
+
+use arrow keys to select the 'free space'. then create a new partion by navigating to 'new'
+
+if you want a swap file, then subtract around 4-16G from the default (default value is however big the unallocated space is). swap file is essentially pagefile.sys for linux btw. if you don't need one, proceed with the default prefilled in  value
+
+set the type for the partition in the long menu as 'linux filesystem'.
+
+if making swap partition: select the rest of the free space after creating an arch partition and set the type as 'linux swap'.
+
+when you're done select 'write' and return to the live iso. run lsblk -f to be sure of the partitions.
+
+(swap partition is created in cfdisk, swap file is created later inside linux filesystem)
+
+#### swap and hibernation 
+
+if you plan on having reliable hibernation, then the swap parition has to be equal (at least) to your base RAM. e.g. if i have 16GB ram, my swap partition would be 16GB.
+
+### base system installation
+
+the core packages, run:
+
+```pacstrap -K /mnt base linux linux-firmware networkmanager```
+
+also recommended: base-devel, sudo, git, nano (as a basic editor before any other editor you want to install, which its recommended to configure later), man-db and man-pages (manual), base, openssh, tex-info, less, which, rsync, linux-headers, efibootmgr, and either intel-ucode or amd-ucode depending on your cpu.
+
+probably look up what those are so you can decide which ones to use personally.
+
+### generate fstab
+
+```genfstab -U /mnt >> /mnt/etc/fstab```
+
+verify with:
+
+```cat /mnt/etc/fstab```
+
+expect to see one line mounting your linux ot, one for the efi system partition, and one for swap if you created it.
+
+### change root (chroot) into the new partition
+
+```arch-chroot /mnt```
+
+#### set the timezone here:
+
+```ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime```
+
+```hwclock --systohc```
+
+#### configure localization
+
+```nano /etc/locale.gen```
+
+uncomment 'en_US.UTF-8 UTF-8'
+
+save: ctrl + o
+enter
+exit: ctrl + x
+
+then:
+
+```locale-gen```
+
+```echo "LANG=en_US.UTF-8" > /etc/locale.conf```
+
+#### set the hostname
+
+```echo "yourname" > /etc/hostname```
+
+except replace yourname with your name
+
+### users
+
+set the root password with `passwd`
+
+then set a standard user account:
+
+```useradd -m -G wheel -s /bin/bash "username"```
+
+(this is for a sudo account)
+
+enable sudo for the wheel group:
+
+```EDITOR=nano visudo```
+
+uncomment this line: 
+
+```%wheel ALL=(ALL:ALL) ALL```
+
+#### enable network manager
+
+```systemctl enable NetworkManager```
+
+### install and configure a bootloader
+
+two popular ones are systemd and GRUB, grub is more recommended for dual booting as it auto detects Windows.
+
+install it:
+
+```pacman -S grub efibootmgr os-prober```
+
+enable windows detection:
+
+```nano /etc/default/grub```
+
+uncomment this line:
+
+```#GRUB_DISABLE_OS_PROBER=false```
+
+save and exit.
+
+install grub to the EFI partition:
+
+```grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB```
+
+detect windows and generate the config:
+
+```grub-mkconfig -o /boot/grub/grub.cfg```
+
+should output: Found Windows Boot Manager on /dev/nvme0n1p1 (or whichever partition was ntfs formatted)
+
+### final step
+
+exit the chroot: `exit`
+
+unmount: `umount -R /mnt`
+
+reboot: `reboot`
+
+on reboot, you should go to a screen (GRUB menu) and have the options "Arch Linux"and "Windows Boot Manager" and probably also advanced options for arch linux. 
+
+log in with your user (not root)
+
+confirm internet works: 
+
+```ping archlinux.org```
+
+if it fails, run
+
+```nmtui````
+
+and connect.
+
+stop the ping with ctrl+c
+
+update the system:
+
+```sudo pacman -Syu```
+
+confirm you're on the installed system:
+
+```uname -r```
+
+verify sudo works: 
+
+```sudo whoami```
+
+next you can install a preferred desktop enviornment/windows manager. the basic install is thus complete. congrats!
