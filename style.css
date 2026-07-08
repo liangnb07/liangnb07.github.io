@@ -1,15 +1,15 @@
 body {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "noto-sans", sans-serif;
 }
 
 html, body, nav{
     font-size: 1rem;
     font-weight:500;
-    font-family: "jetbrains-mono", monospace;
+    font-family: "noto-sans", sans-serif;
 }
 
 h1 {    
-    font-family: "jetbrains-mono", monospace;
+    font-family: "noto-sans", sans-serif;
     font-size: 4rem;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -21,12 +21,12 @@ h1 {
 p, ul li {
     font-size: 0.9rem;
     max-width: 90%;
-    font-family: "jetbrains-mono", monospace;
+    font-family: "noto-sans", sans-serif;
 }
 
 nav {
     font-size: 0.8rem;
-    font-family: "jetbrains-mono", monospace;
+    font-family: "noto-sans", sans-serif;
     margin-left: 5px;
 }
 

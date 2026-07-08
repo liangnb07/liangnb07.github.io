@@ -37,4 +37,5 @@ function injectNavbar() {
         <a href="${prefix}projects/index.html">projects</a> |
         <a href="${prefix}contact/index.html">contact</a>    
     `;
+	<script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag.js"></script>
 }
