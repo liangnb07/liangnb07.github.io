@@ -1,15 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans+SC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
-  font-family: "noto-sans", sans-serif;
+  font-family: "Noto Sans SC", sans-serif;
 }
 
 html, body, nav{
     font-size: 1rem;
     font-weight:500;
-    font-family: "noto-sans", sans-serif;
+    font-family: "Noto Sans SC", sans-serif;
 }
 
 h1 {    
-    font-family: "noto-sans", sans-serif;
+    font-family: "Noto Sans SC", sans-serif;
     font-size: 4rem;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -21,13 +25,19 @@ h1 {
 p, ul li {
     font-size: 0.9rem;
     max-width: 90%;
-    font-family: "noto-sans", sans-serif;
+    font-family: "Noto Sans SC", sans-serif;
 }
 
 nav {
     font-size: 0.8rem;
-    font-family: "noto-sans", sans-serif;
+    font-family: "Noto Sans SC", sans-serif;
     margin-left: 5px;
+}
+
+pre code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .container {
@@ -49,7 +59,7 @@ nav {
 }
 
 
-/* adaptable photo container*/
+/* adaptable photo container(photos)*/
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px,1fr));
