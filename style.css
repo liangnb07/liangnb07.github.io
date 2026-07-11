@@ -58,7 +58,12 @@ pre code {
     letter-spacing: -0.06em; 
 }
 
-
+.projectassets-img {
+	max-width:      350px;
+	margin:         2px;
+	border-radius:  4px;
+	border:         1px solid #a0a0a0;
+}
 /* adaptable photo container(photos)*/
 .gallery-grid {
     display: grid;
