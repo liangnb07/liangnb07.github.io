@@ -12,54 +12,69 @@
 	<div class=container>
         <h1>projects</h1>
         <nav></nav>
-        <h2><a href="../mdnote">MD note</a> </h2>
-	<md>MDnote is a vanilla text editor. 
+        <h2>MDnote</h2>
 
-### exporting
-it doesn't save to any cloud, and all notes are saved to your browser's IndexedDB. notes can be exported as .JSON files and imported into editors. notes are also able to be exported as .txt or .pdf documents. exporting from a root page also exports all children of the root whereas branches, it's only the singular branch page. 
+	<img src="assets/mdnote/mdnote.png" class ="projectassets-img"><img src="assets/mdnote/treemap.png" class="projectassets-img">
+	<md>a lightweight, local-first and typography-oriented note manager built with vanilla javascript
+
+i created mdnote because i wanted a simple notes application that was fast and organized wihtout the complexity of more mainstream or larger tools.
+
+unlike cloud-based apps, mdnote stores everything locally within the browser via IndexedDB, which keeps notes private yet instantly accessible.
+
+### highlights
+
+- hierarchical treemap organization
+	- view all notes in a visual tree structure and create infinitely nested pages through root and branch page creation.
+- flexible exports
+	- supports: 
+		-JSON for backups and reovery; which also simplifies moving notes across web browsers or devices
+		- PDF and TXT
+	- exporting root pages will also export all child pages, but exporting a single branch page will not export the root or any of its children.
+- keyboard-first workflow
+	- includes hotkey for more efficient navigation and editing.
+- local first storage
+	- no accounts, servers, or cloud storage required. all notes stay on the user's browser.
+
+### built with
+
+- html
+- css
+- vanilla javascript
+- IndexedDB
+
+### links
+[🔗 Live Demo](https://liangnb07.github.io/mdnote) · [📂 Github Repository](https://github.com/liangnb07/mdnote)
+	</md>
+	<h2>nomi 记账本</h2>
+<img src="assets/nomi/nomi.png" class="projectassets-img">
+	<md>
+an intentionally simple budgeting tool designed to help users make better spending decisions by connecting their wishlist with their current financial situation.
+
+the idea behind nomi came from wanting a simple way to keep track of things I wanted to buy while also considering whether I could actually afford them. what seperates nomi is that instead of only recording spending after it happens, nomi focuses on planning purchases with awareness of available funds, income, and debt.
+
+the name "nomi" comes from a wordplay on "money": swapping the positions of the letters "m" and "n" to create a unique name with personality.
 
 ### features
-personally i'm probably most proud of the treemap feature. you can press ctrl t or click the sidebar to view a comprehensive list of your notes hierarchically, and you can also infinitely nest branch pages inside root pages. there are a bunch of hotkeys also available via the hotkey page. you can collapse the sidebar. you can also view a mini treemap with expandable/collapsible trees in the sidebar as well. there's also light mode support if you're one of them. weirdos lol. 
 
-### alternatives
-i admit obsidian is amazing resource. i really envy their web organization. i also do use it a lot. same with notion, but that's mostly for calendar management. the reason i still built mdnote is because neither is as lightweight, and i was looking for only a simple notes manager that somehow still looked good, and notion is a huge, bloated app that takes a full two minutes to load. 
+- shopping wishlist
+	- track items you want to buy or are considering purchasing.
+- financial tracking
+	- manage your current funds, income, and debt to understand your available budget.
+- currency switching
+	- switch between RMB (¥) and USD ($).
+- dual-tab interface
+	- separate shopping plans and financial information into dedicated sections.
 
-meanwhile, mdnote is completely FOSS (under the GNU General Public License v3.0) and also extremely lightweight (only a few tens of KB i think). it loads instantly. plus though you can also nest in notion you can't really see everything in an entire tree structure. anyways, give it a try. markdown isn't fully supported yet and i don't have immediate plans to fix that. 
+### built with
 
-### bugs and pending features 
-currently mdnote supports underlining, italics, and headings. bolding is buggy. and image resizing is currently questionable but the rest of the app works fine. i mostly made it for myself so it might not have some features you would want. you're welcome reach out if there's anything you would like to change about it, but i might not get back to you. instead, you can just fork it and make your own.</md>
-	<h2><a href="../nomi">nomi 记账本!</a> </h2>
+- HTML
+- CSS
+- JavaScript
 
-	<md>
+### links
 
-### nomi 记账本!
+[🔗 Live Demo](https://liangnb07.github.io/nomi) · [📂 GitHub Repository](https://github.com/liangnb07/nomi)
 
-根据用户当前拥有的资金量追踪消费愿望清单。
-
-#### 功能：
-
-- 双标签页：
-
-- 购物：查看用户想要购买或考虑购买的商品列表。
-
-- 资金：允许用户追踪当前资金状况，并考虑收入和债务。
-
-- 人民币和美元切换功能。
-
-
-### nomi Budgeting!
-
-Train your spending wish list based on your current financial situation.
-
-#### Features:
-
-- Dual Tabs:
-
-- Shopping: View a list of items you want to buy or are considering buying.
-
-- Funds: Allows you to track your current financial situation and consider income and debt.
-
-- RMB/USD Switching Functionality
 	</md>
 	</div>
     </body>
