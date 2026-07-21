@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <div class="container">
     <meta charset="UTF-8">
     <title>liangnb07</title>
     <link rel="stylesheet" href="style.css">
@@ -10,6 +9,7 @@
 
 </head>
 <body>
+    <div class="container">
     <h1>home</h1>
     <nav></nav>
     <p></p>
@@ -279,7 +279,7 @@
                     if (count > 0) uniqueActiveDays++;
                     
                     let level = 0;
-                    if (count = 1) level = 1;
+                    if (count === 1) level = 1;
                     else if (count >= 2 && count <= 3) level = 2;
                     else if (count >= 4 && count <= 7) level = 3;
                     else if (count >= 8) level = 4;
@@ -296,7 +296,6 @@
             statsHeader.innerText = `过去一年网站共代码迭代了 ${uniqueActiveDays} 天 (Updated ${uniqueActiveDays} days in the past year)`;
         }
     </script>
-
+    </div>
 </body>
-</div>
 </html>
